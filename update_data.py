@@ -27,33 +27,38 @@ INST_LOOKUP_DAYS = 7        # 法人資料回溯天數
 
 
 def get_tw_tickers():
-    """抓取台灣上市(TW)與上櫃(TWO)股票代號"""
+    """抓取台灣上市(TW)與上櫃(TWO)股票代號，回傳 (tickers list, name_map dict)"""
     print("正在獲取台股上市櫃清單...")
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
 
     res_twse = requests.get("https://isin.twse.com.tw/isin/C_public.jsp?strMode=2", headers=headers, timeout=15)
     df_twse = pd.read_html(io.StringIO(res_twse.text))[0]
     twse_tickers = []
+    name_map = {}
     for x in df_twse[0].dropna():
         parts = str(x).split()
-        if len(parts) >= 1 and parts[0].isdigit() and len(parts[0]) == 4:
-            twse_tickers.append(parts[0] + '.TW')
+        if len(parts) >= 2 and parts[0].isdigit() and len(parts[0]) == 4:
+            ticker = parts[0] + '.TW'
+            twse_tickers.append(ticker)
+            name_map[ticker] = parts[1]
 
     res_tpex = requests.get("https://isin.twse.com.tw/isin/C_public.jsp?strMode=4", headers=headers, timeout=15)
     df_tpex = pd.read_html(io.StringIO(res_tpex.text))[0]
     tpex_tickers = []
     for x in df_tpex[0].dropna():
         parts = str(x).split()
-        if len(parts) >= 1 and parts[0].isdigit() and len(parts[0]) == 4:
-            tpex_tickers.append(parts[0] + '.TWO')
+        if len(parts) >= 2 and parts[0].isdigit() and len(parts[0]) == 4:
+            ticker = parts[0] + '.TWO'
+            tpex_tickers.append(ticker)
+            name_map[ticker] = parts[1]
 
     all_tickers = twse_tickers + tpex_tickers
     print(f"共找到 {len(twse_tickers)} 檔上市, {len(tpex_tickers)} 檔上櫃")
 
     if MAX_STOCKS:
         print(f"⚠️ 測試模式：僅抽取前 {MAX_STOCKS} 檔股票進行分析")
-        return all_tickers[:MAX_STOCKS]
-    return all_tickers
+        return all_tickers[:MAX_STOCKS], name_map
+    return all_tickers, name_map
 
 
 def safe_batch_download(tickers, start_date, end_date, batch_size=50):
@@ -345,7 +350,7 @@ def check_volume(df) -> bool:
 
 
 def main():
-    tickers = get_tw_tickers()
+    tickers, name_map = get_tw_tickers()
     if not tickers:
         print("未獲取到任何股票代號，程式終止。")
         return
@@ -431,6 +436,7 @@ def main():
     output = {
         'last_updated': tw_time.strftime('%Y-%m-%d %H:%M:%S'),
         'total_symbols_found': len(final_payload),
+        'name_map': {k: name_map.get(k, '') for k in final_payload},
         'results': final_payload
     }
 

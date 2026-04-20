@@ -62,6 +62,7 @@ st.markdown(f"""
 # 3. 準備渲染資料
 # ==========================================
 all_results = data_store['results']
+name_map = data_store.get('name_map', {})
 symbol_list = sorted(list(all_results.keys()))
 
 if not symbol_list:
@@ -118,7 +119,7 @@ for i, sym in enumerate(symbol_list):
             template="plotly_white",
             paper_bgcolor='white',
             plot_bgcolor='white',
-            title=dict(text=f"<b>{sym}</b>", font=dict(color='black', size=22)),
+            title=dict(text=f"<b>{sym.replace('.TW','').replace('.TWO','')} {name_map.get(sym,'')}</b>", font=dict(color='black', size=22)),
             font=dict(color='black'),
             showlegend=False,
             dragmode=False,
