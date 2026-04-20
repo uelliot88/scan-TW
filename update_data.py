@@ -358,8 +358,9 @@ def main():
     # 預先抓取法人資料（避免在每檔股票迴圈內重複請求）
     inst_data = build_institutional_data(INST_LOOKUP_DAYS)
 
-    start_date = (datetime.now() - timedelta(days=YEARS * 365)).strftime('%Y-%m-%d')
-    end_date = datetime.now().strftime('%Y-%m-%d')
+    tw_now = datetime.utcnow() + timedelta(hours=8)
+    start_date = (tw_now - timedelta(days=YEARS * 365)).strftime('%Y-%m-%d')
+    end_date = (tw_now + timedelta(days=1)).strftime('%Y-%m-%d')
 
     data_dict = safe_batch_download(tickers, start_date, end_date, batch_size=BATCH_SIZE)
 
