@@ -124,16 +124,26 @@ for i, sym in enumerate(symbol_list):
         vol_ma20 = plot_df['volume'].rolling(window=20).mean()
         v_colors = []
         prev_yellow_vol = None
+        chain_active = False
         for c, o, vol, ma20 in zip(plot_df['close'], plot_df['open'], plot_df['volume'], vol_ma20):
-            if prev_yellow_vol is not None and vol >= prev_yellow_vol * 1.3:
-                v_colors.append('#FFD700')
-                prev_yellow_vol = vol
-            elif pd.notna(ma20) and vol >= ma20 * 1.3:
-                v_colors.append('#FFD700')
-                prev_yellow_vol = vol
+            if chain_active:
+                if vol >= prev_yellow_vol * 1.3:
+                    # 鏈延續
+                    v_colors.append('#FFD700')
+                    prev_yellow_vol = vol
+                else:
+                    # 鏈斷掉，本根給正常顏色，不重開新鏈
+                    v_colors.append('#ef5350' if c >= o else '#26a69a')
+                    prev_yellow_vol = None
+                    chain_active = False
             else:
-                v_colors.append('#ef5350' if c >= o else '#26a69a')
-                prev_yellow_vol = None
+                if pd.notna(ma20) and vol >= ma20 * 1.3:
+                    # 開新鏈
+                    v_colors.append('#FFD700')
+                    prev_yellow_vol = vol
+                    chain_active = True
+                else:
+                    v_colors.append('#ef5350' if c >= o else '#26a69a')
         fig.add_trace(go.Bar(x=plot_df['date'], y=plot_df['volume'],
                              marker_color=v_colors, name='量'), row=2, col=1)
 
