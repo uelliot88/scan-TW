@@ -142,7 +142,7 @@ for i, sym in enumerate(page_symbols):
                              marker_color=v_colors, name='量'), row=2, col=1)
 
         fig.update_layout(
-            height=400,
+            height=350,
             margin=dict(l=5, r=40, t=50, b=20),
             xaxis_rangeslider_visible=False,
             template="plotly_white",
@@ -165,10 +165,8 @@ for i, sym in enumerate(page_symbols):
         fig.update_xaxes(type='category', nticks=10, showgrid=False, zeroline=False,
                          fixedrange=True, tickfont=dict(color='black', size=12), row=1, col=1)
         fig.update_xaxes(type='category', nticks=10, showgrid=False, zeroline=False,
-                         fixedrange=True, tickfont=dict(color='black', size=11),
-                         rangeslider=dict(visible=True, thickness=0.06),
-                         row=2, col=1)
-        fig.update_yaxes(showgrid=False, zeroline=False, fixedrange=False,
+                         fixedrange=True, tickfont=dict(color='black', size=11), row=2, col=1)
+        fig.update_yaxes(showgrid=False, zeroline=False, fixedrange=True,
                          tickfont=dict(color='black', size=12), side='right', row=1, col=1)
         fig.update_yaxes(showgrid=False, zeroline=False, fixedrange=True,
                          showticklabels=False, row=2, col=1)
@@ -188,6 +186,7 @@ for i, sym in enumerate(page_symbols):
                         'filename': f'{sym}_Analysis',
                         'scale': 2
                     },
+                    'staticPlot': True,
                     'displayModeBar': False
                 }
             )
