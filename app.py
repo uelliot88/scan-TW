@@ -122,27 +122,42 @@ for i, sym in enumerate(symbol_list):
         # 成交量（放量黃色鏈：首根 vol>=MA20*1.3，後續每根需>=前黃根*1.3）
         vol_ma20 = plot_df['volume'].rolling(window=20).mean()
         v_colors = []
-        prev_yellow_vol = None
         chain_active = False
+        last_yellow_vol = None   # 上一條鏈的最後（最高）黃色量
+        bars_since_break = None  # 鏈斷後計數，None 表示無有效視窗
         for c, o, vol, ma20 in zip(plot_df['close'], plot_df['open'], plot_df['volume'], vol_ma20):
+            normal_color = '#ef5350' if c >= o else '#26a69a'
             if chain_active:
-                if vol >= prev_yellow_vol * 1.3:
-                    # 鏈延續
+                if vol >= last_yellow_vol * 1.3:
                     v_colors.append('#FFD700')
-                    prev_yellow_vol = vol
+                    last_yellow_vol = vol
                 else:
-                    # 鏈斷掉，本根給正常顏色，不重開新鏈
-                    v_colors.append('#ef5350' if c >= o else '#26a69a')
-                    prev_yellow_vol = None
+                    # 鏈斷，開始 20 根視窗
+                    v_colors.append(normal_color)
                     chain_active = False
+                    bars_since_break = 0
             else:
-                if pd.notna(ma20) and vol >= ma20 * 1.3:
-                    # 開新鏈
+                # 20 根視窗內：超過前鏈最大量即重新開鏈
+                if bars_since_break is not None:
+                    bars_since_break += 1
+                    if bars_since_break > 20:
+                        bars_since_break = None
+                        last_yellow_vol = None
+
+                can_restart = (
+                    bars_since_break is not None and
+                    last_yellow_vol is not None and
+                    vol >= last_yellow_vol
+                )
+                can_new = pd.notna(ma20) and vol >= ma20 * 1.3
+
+                if can_restart or can_new:
                     v_colors.append('#FFD700')
-                    prev_yellow_vol = vol
+                    last_yellow_vol = vol
                     chain_active = True
+                    bars_since_break = None
                 else:
-                    v_colors.append('#ef5350' if c >= o else '#26a69a')
+                    v_colors.append(normal_color)
         fig.add_trace(go.Bar(x=plot_df['date'], y=plot_df['volume'],
                              marker_color=v_colors, name='量'), row=2, col=1)
 
