@@ -110,7 +110,7 @@ dl_col, clr_col, _ = st.columns([2, 1, 4])
 with dl_col:
     if sel_count > 0:
         tv_text = ','.join(
-            ('TWSE:' if s.endswith('.TW') else 'TPEX:') + s.replace('.TW', '').replace('.TWO', '')
+            ('TWSE:' if s.endswith('.TW') else 'TPEX:') + s.replace('.TWO', '').replace('.TW', '')
             for s in sorted(st.session_state.selected)
         )
         st.download_button(
@@ -171,19 +171,11 @@ for i, sym in enumerate(page_symbols):
 
         fig.update_layout(
             height=350,
-            margin=dict(l=5, r=40, t=50, b=20),
+            margin=dict(l=5, r=40, t=8, b=20),
             xaxis_rangeslider_visible=False,
             template="plotly_white",
             paper_bgcolor='white',
             plot_bgcolor='white',
-            title=dict(text=(
-                f"<b>{sym.replace('.TW','').replace('.TWO','')} {name_map.get(sym,'')}"
-                f" {'｜漲後整理' if k_data.get('type')=='A' else '｜多頭排列'}"
-                f"{'  🔵外資' if k_data.get('inst_foreign') else ''}"
-                f"{'  🟢投信' if k_data.get('inst_trust') else ''}"
-                f"{'  VOL🔺' if k_data.get('vol_surge') else ''}"
-                f"</b>"
-            ), font=dict(color='black', size=22)),
             font=dict(color='black'),
             showlegend=False,
             dragmode=False,
@@ -202,12 +194,18 @@ for i, sym in enumerate(page_symbols):
         if i % 2 == 0:
             cols = st.columns(2)
 
+        code = sym.replace('.TWO', '').replace('.TW', '')
+        title_label = (
+            f"**{code} {name_map.get(sym, '')}"
+            f" {'｜漲後整理' if k_data.get('type')=='A' else '｜多頭排列'}"
+            f"{'  🔵外資' if k_data.get('inst_foreign') else ''}"
+            f"{'  🟢投信' if k_data.get('inst_trust') else ''}"
+            f"{'  VOL🔺' if k_data.get('vol_surge') else ''}**"
+        )
+
         with cols[i % 2]:
-            checked = st.checkbox(
-                f"{sym.replace('.TW','').replace('.TWO','')} {name_map.get(sym,'')}",
-                value=sym in st.session_state.selected,
-                key=f"chk_{page}_{sym}"
-            )
+            checked = st.checkbox(title_label, value=sym in st.session_state.selected,
+                                  key=f"chk_{page}_{sym}")
             if checked:
                 st.session_state.selected.add(sym)
             else:
