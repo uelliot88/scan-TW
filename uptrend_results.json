@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-23 16:16:51",
+  "last_updated": "2026-04-23 16:29:04",
   "total_symbols_found": 127,
   "name_map": {
     "1568.TW": "倉佑",
@@ -1543,7 +1543,7 @@
     "1590.TW": {
       "type": "B",
       "inst_foreign": false,
-      "inst_trust": true,
+      "inst_trust": false,
       "date": [
         "08-29",
         "09-01",
@@ -52266,7 +52266,7 @@
     },
     "4540.TW": {
       "type": "B",
-      "inst_foreign": true,
+      "inst_foreign": false,
       "inst_trust": false,
       "date": [
         "08-29",
@@ -88900,7 +88900,7 @@
     },
     "8081.TW": {
       "type": "A",
-      "inst_foreign": true,
+      "inst_foreign": false,
       "inst_trust": false,
       "date": [
         "08-29",
