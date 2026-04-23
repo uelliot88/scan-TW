@@ -63,16 +63,28 @@ st.markdown(f"""
 # ==========================================
 all_results = data_store['results']
 name_map = data_store.get('name_map', {})
+sector_map = data_store.get('sector_map', {})
 
-# 型態選單
-type_options = {'全部': None, '漲後整理（型態A）': 'A', '多頭排列（型態B）': 'B'}
-selected_label = st.selectbox('型態選擇', list(type_options.keys()), index=0)
-selected_type = type_options[selected_label]
+# 篩選列
+filter_col1, filter_col2 = st.columns(2)
+
+with filter_col1:
+    type_options = {'全部': None, '漲後整理（型態A）': 'A', '多頭排列（型態B）': 'B'}
+    selected_label = st.selectbox('型態選擇', list(type_options.keys()), index=0)
+    selected_type = type_options[selected_label]
+
+with filter_col2:
+    all_sectors = sorted({v for v in sector_map.values() if v})
+    sector_options = ['全部產業'] + all_sectors
+    selected_sector = st.selectbox('產業別', sector_options, index=0)
 
 if selected_type:
     filtered = {k: v for k, v in all_results.items() if v.get('type') == selected_type}
 else:
     filtered = all_results
+
+if selected_sector != '全部產業':
+    filtered = {k: v for k, v in filtered.items() if v.get('sector') == selected_sector}
 
 symbol_list = sorted(list(filtered.keys()))
 
@@ -195,9 +207,11 @@ for i, sym in enumerate(page_symbols):
             cols = st.columns(2)
 
         code = sym.replace('.TWO', '').replace('.TW', '')
+        sector = k_data.get('sector', '')
         title_label = (
             f"**{code} {name_map.get(sym, '')}"
             f" {'｜漲後整理' if k_data.get('type')=='A' else '｜多頭排列'}"
+            f"{f'  [{sector}]' if sector else ''}"
             f"{'  🔵外資' if k_data.get('inst_foreign') else ''}"
             f"{'  🟢投信' if k_data.get('inst_trust') else ''}"
             f"{'  VOL🔺' if k_data.get('vol_surge') else ''}**"
