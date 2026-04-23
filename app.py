@@ -145,7 +145,7 @@ for i, sym in enumerate(symbol_list):
                 can_restart = (
                     bars_since_break is not None and
                     last_yellow_vol is not None and
-                    vol >= last_yellow_vol
+                    vol >= last_yellow_vol * 1.5
                 )
                 can_new = pd.notna(ma20) and vol >= ma20 * 2
 
