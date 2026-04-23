@@ -119,21 +119,20 @@ for i, sym in enumerate(symbol_list):
         fig.add_trace(go.Scatter(x=plot_df['date'], y=plot_df['MA60'],
                                  line=dict(color='#36b9cc', width=1), name='60MA'), row=1, col=1)
 
-        # 成交量（第一根放量標黃色）
+        # 成交量（放量黃色鏈：首根 vol>=MA20*1.3，後續每根需>=前黃根*1.3）
         vol_ma20 = plot_df['volume'].rolling(window=20).mean()
-        first_surge_idx = next(
-            (i for i, (vol, ma20) in enumerate(zip(plot_df['volume'], vol_ma20))
-             if pd.notna(ma20) and vol >= ma20 * 1.3),
-            None
-        )
         v_colors = []
-        for idx, (c, o) in enumerate(zip(plot_df['close'], plot_df['open'])):
-            if idx == first_surge_idx:
+        prev_yellow_vol = None
+        for c, o, vol, ma20 in zip(plot_df['close'], plot_df['open'], plot_df['volume'], vol_ma20):
+            if prev_yellow_vol is not None and vol >= prev_yellow_vol * 1.3:
                 v_colors.append('#FFD700')
-            elif c >= o:
-                v_colors.append('#ef5350')
+                prev_yellow_vol = vol
+            elif pd.notna(ma20) and vol >= ma20 * 1.3:
+                v_colors.append('#FFD700')
+                prev_yellow_vol = vol
             else:
-                v_colors.append('#26a69a')
+                v_colors.append('#ef5350' if c >= o else '#26a69a')
+                prev_yellow_vol = None
         fig.add_trace(go.Bar(x=plot_df['date'], y=plot_df['volume'],
                              marker_color=v_colors, name='量'), row=2, col=1)
 
