@@ -119,9 +119,43 @@ for i, sym in enumerate(symbol_list):
         fig.add_trace(go.Scatter(x=plot_df['date'], y=plot_df['MA60'],
                                  line=dict(color='#36b9cc', width=1), name='60MA'), row=1, col=1)
 
-        # 成交量（放量黃色鏈：首根 vol>=MA20*1.3，後續每根需>=前黃根*1.3）
-        v_colors = ['#ef5350' if c >= o else '#26a69a'
-                    for c, o in zip(plot_df['close'], plot_df['open'])]
+        # 成交量黃色鏈
+        vol_ma20 = plot_df['volume'].rolling(window=20).mean()
+        v_colors = []
+        chain_active = False
+        last_yellow_vol = None   # 前鏈最大量（鏈中最後一根，因每根需 ×1.5 所以最後最大）
+        bars_since_break = None  # 鏈斷後計數
+        for c, o, vol, ma20 in zip(plot_df['close'], plot_df['open'], plot_df['volume'], vol_ma20):
+            normal_color = '#ef5350' if c >= o else '#26a69a'
+            if chain_active:
+                if vol >= last_yellow_vol * 1.5:
+                    v_colors.append('#FFD700')
+                    last_yellow_vol = vol
+                else:
+                    v_colors.append(normal_color)
+                    chain_active = False
+                    bars_since_break = 0
+            else:
+                if bars_since_break is not None:
+                    bars_since_break += 1
+                    if bars_since_break > 30:
+                        bars_since_break = None
+                        last_yellow_vol = None
+
+                can_restart = (
+                    bars_since_break is not None and
+                    last_yellow_vol is not None and
+                    vol >= last_yellow_vol
+                )
+                can_new = pd.notna(ma20) and vol >= ma20 * 2
+
+                if can_restart or can_new:
+                    v_colors.append('#FFD700')
+                    last_yellow_vol = vol
+                    chain_active = True
+                    bars_since_break = None
+                else:
+                    v_colors.append(normal_color)
         fig.add_trace(go.Bar(x=plot_df['date'], y=plot_df['volume'],
                              marker_color=v_colors, name='量'), row=2, col=1)
 
