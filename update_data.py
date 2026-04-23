@@ -424,8 +424,15 @@ def main():
             # 法人標註（不篩選，僅記錄）
             inst_flags = get_institutional_flags(symbol, inst_data)
 
-            # 打包最近 260 根 K 線（前 60 根供均線預熱，顯示後 200 根）
-            plot_df = clean_df.tail(260).copy()
+            # 用完整歷史計算均線，只取後 200 根 K 線輸出
+            ma10 = clean_df['Close'].rolling(window=10).mean()
+            ma20 = clean_df['Close'].rolling(window=20).mean()
+            ma60 = clean_df['Close'].rolling(window=60).mean()
+
+            plot_df = clean_df.tail(200).copy()
+            def fmt_ma(series):
+                return [round(float(x), 2) if pd.notna(x) else None for x in series.tail(200)]
+
             k_data = {
                 'type':         stock_type,
                 'inst_foreign': inst_flags['foreign'],
@@ -435,7 +442,10 @@ def main():
                 'high':   [round(float(x), 2) for x in plot_df['High']],
                 'low':    [round(float(x), 2) for x in plot_df['Low']],
                 'close':  [round(float(x), 2) for x in plot_df['Close']],
-                'volume': [int(x) for x in plot_df['Volume']]
+                'volume': [int(x) for x in plot_df['Volume']],
+                'ma10':   fmt_ma(ma10),
+                'ma20':   fmt_ma(ma20),
+                'ma60':   fmt_ma(ma60),
             }
             final_payload[symbol] = k_data
 
