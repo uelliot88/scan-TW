@@ -119,13 +119,15 @@ for i, sym in enumerate(symbol_list):
         fig.add_trace(go.Scatter(x=plot_df['date'], y=plot_df['MA60'],
                                  line=dict(color='#36b9cc', width=1), name='60MA'), row=1, col=1)
 
-        # 成交量黃色鏈
-        vol_ma20 = plot_df['volume'].rolling(window=20).mean()
+        # 成交量黃色鏈（門檻固定用最近一根 MA20，避免早期低量誤觸）
+        vol_ma20_series = plot_df['volume'].rolling(window=20).mean()
+        recent_ma20 = vol_ma20_series.dropna().iloc[-1] if vol_ma20_series.dropna().size > 0 else None
+        trigger_vol = recent_ma20 * 2 if recent_ma20 else float('inf')
         v_colors = []
         chain_active = False
-        last_yellow_vol = None   # 前鏈最大量（鏈中最後一根，因每根需 ×1.5 所以最後最大）
-        bars_since_break = None  # 鏈斷後計數
-        for c, o, vol, ma20 in zip(plot_df['close'], plot_df['open'], plot_df['volume'], vol_ma20):
+        last_yellow_vol = None
+        bars_since_break = None
+        for c, o, vol in zip(plot_df['close'], plot_df['open'], plot_df['volume']):
             normal_color = '#ef5350' if c >= o else '#26a69a'
             if chain_active:
                 if vol >= last_yellow_vol * 1.5:
@@ -147,7 +149,7 @@ for i, sym in enumerate(symbol_list):
                     last_yellow_vol is not None and
                     vol >= last_yellow_vol * 1.5
                 )
-                can_new = pd.notna(ma20) and vol >= ma20 * 2
+                can_new = vol >= trigger_vol
 
                 if can_restart or can_new:
                     v_colors.append('#FFD700')
