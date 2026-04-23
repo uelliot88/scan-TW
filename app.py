@@ -119,9 +119,21 @@ for i, sym in enumerate(symbol_list):
         fig.add_trace(go.Scatter(x=plot_df['date'], y=plot_df['MA60'],
                                  line=dict(color='#36b9cc', width=1), name='60MA'), row=1, col=1)
 
-        # 成交量
-        v_colors = ['#ef5350' if c >= o else '#26a69a'
-                    for c, o in zip(plot_df['close'], plot_df['open'])]
+        # 成交量（第一根放量標黃色）
+        vol_ma20 = plot_df['volume'].rolling(window=20).mean()
+        first_surge_idx = next(
+            (i for i, (vol, ma20) in enumerate(zip(plot_df['volume'], vol_ma20))
+             if pd.notna(ma20) and vol >= ma20 * 1.3),
+            None
+        )
+        v_colors = []
+        for idx, (c, o) in enumerate(zip(plot_df['close'], plot_df['open'])):
+            if idx == first_surge_idx:
+                v_colors.append('#FFD700')
+            elif c >= o:
+                v_colors.append('#ef5350')
+            else:
+                v_colors.append('#26a69a')
         fig.add_trace(go.Bar(x=plot_df['date'], y=plot_df['volume'],
                              marker_color=v_colors, name='量'), row=2, col=1)
 
