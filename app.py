@@ -132,7 +132,13 @@ for i, sym in enumerate(symbol_list):
             template="plotly_white",
             paper_bgcolor='white',
             plot_bgcolor='white',
-            title=dict(text=f"<b>{sym.replace('.TW','').replace('.TWO','')} {name_map.get(sym,'')} {'｜漲後整理' if k_data.get('type')=='A' else '｜多頭排列'}</b>", font=dict(color='black', size=22)),
+            title=dict(text=(
+                f"<b>{sym.replace('.TW','').replace('.TWO','')} {name_map.get(sym,'')}"
+                f" {'｜漲後整理' if k_data.get('type')=='A' else '｜多頭排列'}"
+                f"{'  🔵外資' if k_data.get('inst_foreign') else ''}"
+                f"{'  🟢投信' if k_data.get('inst_trust') else ''}"
+                f"</b>"
+            ), font=dict(color='black', size=22)),
             font=dict(color='black'),
             showlegend=False,
             dragmode=False,

@@ -16,8 +16,7 @@ from datetime import datetime, timedelta
 # 參數設定
 # ==========================================
 YEARS = 0.65
-MIN_RISE_PCT = 0.10         # 波段最小漲幅 10%
-MAX_RISE_PCT = 0.15         # 波段最大漲幅 15%
+MIN_RISE_PCT = 0.20         # 波段最小漲幅 20%
 MIN_DURATION = 5            # 最少持續 5 天
 LOOKBACK_PERIOD = 15        # 找尋局部高低點的視窗大小
 MAX_STOCKS = None           # None 代表跑全市場
@@ -187,7 +186,7 @@ def identify_uptrend(df, symbol):
             rise_pct = (high_price - low_price) / low_price
             duration = high_idx - low_idx
 
-            if MIN_RISE_PCT <= rise_pct <= MAX_RISE_PCT and duration >= MIN_DURATION:
+            if rise_pct >= MIN_RISE_PCT and duration >= MIN_DURATION:
                 segment_data = df.iloc[low_idx + 1: high_idx]
                 if len(segment_data) == 0:
                     is_pure = True
@@ -324,23 +323,25 @@ def build_institutional_data(n_days=7):
     return result
 
 
-def check_institutional(stock_code: str, inst_data: dict) -> bool:
+def get_institutional_flags(stock_code: str, inst_data: dict) -> dict:
     """
-    外資 OR 投信 任一符合：
-    1. 近兩日連續買超
-    2. 近五日淨額為正
+    回傳外資、投信是否符合買超條件（近2日連續買超 + 近5日淨額為正）
+    {'foreign': bool, 'trust': bool}
     """
     code = stock_code.split('.')[0]
-
-    if code not in inst_data:
-        return False
 
     def passes(series):
         if len(series) < 5:
             return False
         return all(v > 0 for v in series[-2:]) and sum(series[-5:]) > 0
 
-    return passes(inst_data[code]['foreign']) or passes(inst_data[code]['trust'])
+    if code not in inst_data:
+        return {'foreign': False, 'trust': False}
+
+    return {
+        'foreign': passes(inst_data[code]['foreign']),
+        'trust':   passes(inst_data[code]['trust']),
+    }
 
 
 def check_volume(df) -> bool:
@@ -385,9 +386,8 @@ def main():
     filtered_out_by_ma = 0
     filtered_out_by_segment = 0
     filtered_out_by_volume = 0
-    filtered_out_by_inst = 0
 
-    print("\n開始執行四重過濾並打包繪圖數據...")
+    print("\n開始執行三重過濾並打包繪圖數據...")
 
     for symbol in tickers:
         try:
@@ -410,7 +410,7 @@ def main():
                 continue
             stock_type = 'A' if is_a else 'B'
 
-            # 第二重：波段識別（10~15%）
+            # 第二重：波段識別（≥20%，不跌回起漲點）
             segments = identify_uptrend(clean_df, symbol)
             if not segments:
                 filtered_out_by_segment += 1
@@ -421,15 +421,15 @@ def main():
                 filtered_out_by_volume += 1
                 continue
 
-            # 第四重：法人條件（外資 OR 投信）
-            if not check_institutional(symbol, inst_data):
-                filtered_out_by_inst += 1
-                continue
+            # 法人標註（不篩選，僅記錄）
+            inst_flags = get_institutional_flags(symbol, inst_data)
 
             # 打包最近 200 根 K 線
             plot_df = clean_df.tail(200).copy()
             k_data = {
-                'type':   stock_type,
+                'type':         stock_type,
+                'inst_foreign': inst_flags['foreign'],
+                'inst_trust':   inst_flags['trust'],
                 'date':   plot_df.index.strftime('%m-%d').tolist(),
                 'open':   [round(float(x), 2) for x in plot_df['Open']],
                 'high':   [round(float(x), 2) for x in plot_df['High']],
@@ -455,11 +455,13 @@ def main():
         json.dump(output, f, ensure_ascii=False, indent=2)
 
     print(f"\n✅ 分析完成！")
+    inst_foreign_count = sum(1 for v in final_payload.values() if v.get('inst_foreign'))
+    inst_trust_count   = sum(1 for v in final_payload.values() if v.get('inst_trust'))
     print(f"[報告] 淘汰報告：")
-    print(f"   - {filtered_out_by_ma}      檔因【均線條件不符（非A型漲後整理/非B型多頭排列）】被淘汰")
-    print(f"   - {filtered_out_by_segment} 檔因【無 10~15% 有效波段】被淘汰")
+    print(f"   - {filtered_out_by_ma}      檔因【均線條件不符】被淘汰")
+    print(f"   - {filtered_out_by_segment} 檔因【無 ≥20% 有效波段】被淘汰")
     print(f"   - {filtered_out_by_volume}  檔因【成交量不足或未放量】被淘汰")
-    print(f"   - {filtered_out_by_inst}    檔因【外資/投信未持續買超】被淘汰")
+    print(f"[法人標註] 外資買超：{inst_foreign_count} 檔，投信買超：{inst_trust_count} 檔")
     print(f"[結果] 最終找到 {len(final_payload)} 檔符合條件個股，K 線已打包進 uptrend_results.json")
     if failed_count > 0:
         print(f"⚠️ 有 {failed_count} 檔股票在計算時發生例外狀況被跳過")
