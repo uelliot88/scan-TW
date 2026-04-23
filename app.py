@@ -137,7 +137,7 @@ for i, sym in enumerate(symbol_list):
                 f" {'｜漲後整理' if k_data.get('type')=='A' else '｜多頭排列'}"
                 f"{'  🔵外資' if k_data.get('inst_foreign') else ''}"
                 f"{'  🟢投信' if k_data.get('inst_trust') else ''}"
-                f"{'  📊' if k_data.get('vol_surge') else ''}"
+                f"{'  VOL🔺' if k_data.get('vol_surge') else ''}"
                 f"</b>"
             ), font=dict(color='black', size=22)),
             font=dict(color='black'),
