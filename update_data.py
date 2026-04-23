@@ -15,7 +15,7 @@ from datetime import datetime, timedelta
 # ==========================================
 # 參數設定
 # ==========================================
-YEARS = 0.65
+YEARS = 1.2
 MIN_RISE_PCT = 0.20         # 波段最小漲幅 20%
 MIN_DURATION = 5            # 最少持續 5 天
 LOOKBACK_PERIOD = 15        # 找尋局部高低點的視窗大小
