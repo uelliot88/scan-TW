@@ -16,13 +16,14 @@ from datetime import datetime, timedelta
 # 參數設定
 # ==========================================
 YEARS = 0.65
-MIN_RISE_PCT = 0.3          # 波段最小漲幅 30%
+MIN_RISE_PCT = 0.10         # 波段最小漲幅 10%
+MAX_RISE_PCT = 0.15         # 波段最大漲幅 15%
 MIN_DURATION = 5            # 最少持續 5 天
 LOOKBACK_PERIOD = 15        # 找尋局部高低點的視窗大小
 MAX_STOCKS = None           # None 代表跑全市場
 BATCH_SIZE = 50             # 每次向 Yahoo 請求的股票數量
-MIN_VOLUME_LOTS = 1000      # 最小成交量（張），1張=1000股
-VOLUME_SURGE_RATIO = 1.5    # 量能增加倍數（近5日均量 ÷ 近20日均量）
+MIN_VOLUME_LOTS = 800       # 最小成交量（張），1張=1000股
+VOLUME_SURGE_RATIO = 1.3    # 量能增加倍數（近5日均量 ÷ 近20日均量）
 INST_LOOKUP_DAYS = 7        # 法人資料回溯天數
 
 
@@ -90,45 +91,72 @@ def safe_batch_download(tickers, start_date, end_date, batch_size=50):
     return all_data
 
 
-def check_ma_trend(df):
-    """【宏觀趨勢濾網】多頭排列 + 底部墊高 + 季線控管 + 強勢突破"""
+def _build_ma_df(df):
+    """計算均線並回傳 (temp_df, recent_df)，供型態判斷共用"""
+    temp_df = pd.DataFrame(index=df.index)
+    temp_df['Close'] = df['Close']
+    temp_df['Low']   = df['Low']
+    temp_df['MA10']  = temp_df['Close'].rolling(window=10).mean()
+    temp_df['MA20']  = temp_df['Close'].rolling(window=20).mean()
+    temp_df['MA60']  = temp_df['Close'].rolling(window=60).mean()
+    half_year_ago = datetime.now() - timedelta(days=180)
+    recent_df = temp_df[temp_df.index >= half_year_ago].dropna()
+    return temp_df, recent_df
+
+
+def _check_base(df, temp_df, recent_df):
+    """共同基底條件：底部墊高 + 季線健康 + 收盤 > MA60"""
     if len(df) < 120:
         return False
 
+    # 底部墊高
     latest_low = float(df['Low'].iloc[-1])
-    old_zone_high = float(df['High'].iloc[-120:-90].max())
-    if latest_low <= old_zone_high:
+    if latest_low <= float(df['High'].iloc[-120:-90].max()):
+        return False
+    current_zone_low    = float(df['Low'].iloc[-30:].min())
+    low_60_ago          = float(df['Low'].iloc[-60])
+    zone_60_to_90_min   = float(df['Low'].iloc[-90:-60].min())
+    zone_120_to_90_min  = float(df['Low'].iloc[-120:-90].min())
+    if current_zone_low < zone_60_to_90_min or low_60_ago < zone_120_to_90_min:
         return False
 
-    current_zone_low = float(df['Low'].iloc[-30:].min())
-    low_60_ago = float(df['Low'].iloc[-60])
-    zone_60_to_90_min = float(df['Low'].iloc[-90:-60].min())
-    zone_120_to_90_min = float(df['Low'].iloc[-120:-90].min())
-
-    cond_A = current_zone_low >= zone_60_to_90_min
-    cond_B = low_60_ago >= zone_120_to_90_min
-
-    temp_df = pd.DataFrame(index=df.index)
-    temp_df['Close'] = df['Close']
-    temp_df['Low'] = df['Low']
-    temp_df['MA10'] = temp_df['Close'].rolling(window=10).mean()
-    temp_df['MA20'] = temp_df['Close'].rolling(window=20).mean()
-    temp_df['MA60'] = temp_df['Close'].rolling(window=60).mean()
-
-    half_year_ago = datetime.now() - timedelta(days=180)
-    recent_df = temp_df[temp_df.index >= half_year_ago].dropna()
-
-    if len(recent_df) > 0:
-        days_below_ma60 = (recent_df['Low'] < recent_df['MA60']).sum()
-        if days_below_ma60 > 60:
-            return False
-
+    # 季線壓制排除
     if len(recent_df) < 60:
         return False
+    if (recent_df['Low'] < recent_df['MA60']).sum() > 60:
+        return False
 
+    # 近半年 MA10/MA20 同站 MA60 比例 ≥ 25%
     valid_days = ((recent_df['MA10'] > recent_df['MA60']) & (recent_df['MA20'] > recent_df['MA60'])).sum()
-    ratio = valid_days / len(recent_df)
-    return ratio >= 0.25
+    if valid_days / len(recent_df) < 0.25:
+        return False
+
+    # 收盤站上 MA60
+    if float(temp_df['Close'].iloc[-1]) <= float(temp_df['MA60'].iloc[-1]):
+        return False
+
+    return True
+
+
+def check_type_a(df):
+    """型態A：漲後整理 — 收盤 > MA60 且 MA10/MA20 均線糾結（差距 ≤ 3%）"""
+    temp_df, recent_df = _build_ma_df(df)
+    if not _check_base(df, temp_df, recent_df):
+        return False
+    ma10 = float(temp_df['MA10'].iloc[-1])
+    ma20 = float(temp_df['MA20'].iloc[-1])
+    return abs(ma10 - ma20) / ma20 <= 0.03
+
+
+def check_type_b(df):
+    """型態B：多頭排列趨勢中 — MA10 > MA20 > MA60"""
+    temp_df, recent_df = _build_ma_df(df)
+    if not _check_base(df, temp_df, recent_df):
+        return False
+    ma10 = float(temp_df['MA10'].iloc[-1])
+    ma20 = float(temp_df['MA20'].iloc[-1])
+    ma60 = float(temp_df['MA60'].iloc[-1])
+    return ma10 > ma20 > ma60
 
 
 def identify_uptrend(df, symbol):
@@ -159,7 +187,7 @@ def identify_uptrend(df, symbol):
             rise_pct = (high_price - low_price) / low_price
             duration = high_idx - low_idx
 
-            if rise_pct >= MIN_RISE_PCT and duration >= MIN_DURATION:
+            if MIN_RISE_PCT <= rise_pct <= MAX_RISE_PCT and duration >= MIN_DURATION:
                 segment_data = df.iloc[low_idx + 1: high_idx]
                 if len(segment_data) == 0:
                     is_pure = True
@@ -188,7 +216,7 @@ def identify_uptrend(df, symbol):
 
 
 # ==========================================
-# 新增：法人買賣超資料
+# 法人買賣超資料（外資 / 投信 分開追蹤）
 # ==========================================
 
 def get_recent_trading_dates(n=7):
@@ -199,15 +227,15 @@ def get_recent_trading_dates(n=7):
     while len(dates) < n and attempts < 30:
         d -= timedelta(days=1)
         attempts += 1
-        if d.weekday() < 5:  # 0=週一, 4=週五
+        if d.weekday() < 5:
             dates.append(d)
-    return sorted(dates)  # 由舊到新
+    return sorted(dates)
 
 
 def fetch_twse_institutional(date: datetime):
     """
-    抓取上市三大法人買賣超（TWSE T86）
-    回傳 {stock_code: net_shares}，正數=買超，負數=賣超
+    抓取上市外資 / 投信買賣超（TWSE T86）
+    回傳 {stock_code: {'foreign': net, 'trust': net}}
     """
     date_str = date.strftime('%Y%m%d')
     url = f"https://www.twse.com.tw/fund/T86?response=json&date={date_str}&selectType=ALL"
@@ -221,9 +249,9 @@ def fetch_twse_institutional(date: datetime):
         for row in data['data']:
             code = str(row[0]).strip()
             try:
-                # index 18 = 三大法人買賣超股數（合計）
-                net_str = str(row[18]).replace(',', '').replace('+', '').strip()
-                result[code] = int(net_str)
+                foreign = int(str(row[4]).replace(',', '').replace('+', '').strip())   # 外資買賣超
+                trust   = int(str(row[10]).replace(',', '').replace('+', '').strip())  # 投信買賣超
+                result[code] = {'foreign': foreign, 'trust': trust}
             except (ValueError, IndexError):
                 continue
         return result
@@ -233,8 +261,8 @@ def fetch_twse_institutional(date: datetime):
 
 def fetch_tpex_institutional(date: datetime):
     """
-    抓取上櫃三大法人買賣超（TPEX）
-    回傳 {stock_code: net_shares}，正數=買超，負數=賣超
+    抓取上櫃外資 / 投信買賣超（TPEX）
+    回傳 {stock_code: {'foreign': net, 'trust': net}}
     """
     roc_year = date.year - 1911
     date_str = f"{roc_year}/{date.strftime('%m/%d')}"
@@ -252,9 +280,9 @@ def fetch_tpex_institutional(date: datetime):
         for row in data['aaData']:
             code = str(row[0]).strip()
             try:
-                # index 14 = 三大法人買賣超（千股）→ 轉換為股
-                net_str = str(row[14]).replace(',', '').replace('+', '').strip()
-                result[code] = int(float(net_str) * 1000)
+                foreign = int(float(str(row[4]).replace(',', '').replace('+', '').strip()) * 1000)   # 外資（千股）
+                trust   = int(float(str(row[10]).replace(',', '').replace('+', '').strip()) * 1000)  # 投信（千股）
+                result[code] = {'foreign': foreign, 'trust': trust}
             except (ValueError, IndexError):
                 continue
         return result
@@ -264,11 +292,11 @@ def fetch_tpex_institutional(date: datetime):
 
 def build_institutional_data(n_days=7):
     """
-    建立最近 n_days 個交易日的法人買賣超序列
-    回傳: {stock_code: [oldest_net, ..., newest_net]}
+    建立最近 n_days 個交易日的外資/投信買賣超序列
+    回傳: {stock_code: {'foreign': [...], 'trust': [...]}}
     """
     trading_dates = get_recent_trading_dates(n_days)
-    daily_records = {}  # {date: {code: net}}
+    daily_records = {}
 
     print(f"\n[法人] 正在抓取最近 {n_days} 個交易日的法人資料...")
     for d in trading_dates:
@@ -280,16 +308,16 @@ def build_institutional_data(n_days=7):
         print(f"   {d.strftime('%Y-%m-%d')} → {status}")
         time.sleep(0.8)
 
-    # 收集所有出現過的股票代號
     all_codes = set()
     for day_data in daily_records.values():
         all_codes.update(day_data.keys())
 
-    # 轉置為 {code: [net_day1, ..., net_dayN]}
     result = {}
     for code in all_codes:
-        series = [daily_records[d].get(code, 0) for d in trading_dates]
-        result[code] = series
+        result[code] = {
+            'foreign': [daily_records[d].get(code, {}).get('foreign', 0) for d in trading_dates],
+            'trust':   [daily_records[d].get(code, {}).get('trust',   0) for d in trading_dates],
+        }
 
     valid_days = sum(1 for d in trading_dates if daily_records[d])
     print(f"✅ 法人資料載入完成，共 {valid_days} 個有效交易日，涵蓋 {len(result)} 檔個股")
@@ -298,39 +326,28 @@ def build_institutional_data(n_days=7):
 
 def check_institutional(stock_code: str, inst_data: dict) -> bool:
     """
-    法人篩選條件：
+    外資 OR 投信 任一符合：
     1. 近兩日連續買超
     2. 近五日淨額為正
     """
-    code = stock_code.split('.')[0]  # 去除 .TW / .TWO 後綴
+    code = stock_code.split('.')[0]
 
     if code not in inst_data:
         return False
 
-    series = inst_data[code]  # oldest → newest
+    def passes(series):
+        if len(series) < 5:
+            return False
+        return all(v > 0 for v in series[-2:]) and sum(series[-5:]) > 0
 
-    if len(series) < 5:
-        return False
-
-    recent_2 = series[-2:]
-    recent_5 = series[-5:]
-
-    # 條件1：近兩日連續買超
-    if not all(v > 0 for v in recent_2):
-        return False
-
-    # 條件2：五日淨額為正
-    if sum(recent_5) <= 0:
-        return False
-
-    return True
+    return passes(inst_data[code]['foreign']) or passes(inst_data[code]['trust'])
 
 
 def check_volume(df) -> bool:
     """
     成交量篩選條件：
-    3. 近5日均量 > 1000張（1,000,000 股）
-    4. 近5日均量 > 近20日均量 × 1.5（量能明顯增加）
+    1. 近5日均量 > 800張（800,000 股）
+    2. 近5日均量 > 近20日均量 × 1.3
     """
     if len(df) < 20:
         return False
@@ -338,7 +355,7 @@ def check_volume(df) -> bool:
     vol_5 = df['Volume'].iloc[-5:].mean()
     vol_20 = df['Volume'].iloc[-20:].mean()
 
-    min_vol_shares = MIN_VOLUME_LOTS * 1000  # 1000張 = 1,000,000 股
+    min_vol_shares = MIN_VOLUME_LOTS * 1000
 
     if vol_5 < min_vol_shares:
         return False
@@ -355,7 +372,6 @@ def main():
         print("未獲取到任何股票代號，程式終止。")
         return
 
-    # 預先抓取法人資料（避免在每檔股票迴圈內重複請求）
     inst_data = build_institutional_data(INST_LOOKUP_DAYS)
 
     tw_now = datetime.utcnow() + timedelta(hours=8)
@@ -367,13 +383,11 @@ def main():
     final_payload = {}
     failed_count = 0
     filtered_out_by_ma = 0
-    filtered_out_by_timing = 0
+    filtered_out_by_segment = 0
     filtered_out_by_volume = 0
     filtered_out_by_inst = 0
 
-    two_months_ago = datetime.now() - timedelta(days=5)
-
-    print("\n開始執行五重過濾並打包繪圖數據...")
+    print("\n開始執行四重過濾並打包繪圖數據...")
 
     for symbol in tickers:
         try:
@@ -388,38 +402,34 @@ def main():
             if len(clean_df) == 0:
                 continue
 
-            # 第一重：均線多頭濾網（原始條件）
-            if not check_ma_trend(clean_df):
+            # 第一重：均線濾網（型態A 或 型態B）
+            is_a = check_type_a(clean_df)
+            is_b = check_type_b(clean_df)
+            if not (is_a or is_b):
                 filtered_out_by_ma += 1
                 continue
+            stock_type = 'A' if is_a else 'B'
 
-            # 第二重：波段識別（原始條件）
+            # 第二重：波段識別（10~15%）
             segments = identify_uptrend(clean_df, symbol)
             if not segments:
-                filtered_out_by_timing += 1
+                filtered_out_by_segment += 1
                 continue
 
-            has_old_uptrend = any(
-                datetime.strptime(seg['end_date'], '%Y-%m-%d') <= two_months_ago
-                for seg in segments
-            )
-            if not has_old_uptrend:
-                filtered_out_by_timing += 1
-                continue
-
-            # 第三重：成交量條件（新增）
+            # 第三重：成交量條件
             if not check_volume(clean_df):
                 filtered_out_by_volume += 1
                 continue
 
-            # 第四重：法人條件（新增）
+            # 第四重：法人條件（外資 OR 投信）
             if not check_institutional(symbol, inst_data):
                 filtered_out_by_inst += 1
                 continue
 
-            # 打包最近 120 根 K 線
-            plot_df = clean_df.tail(120).copy()
+            # 打包最近 200 根 K 線
+            plot_df = clean_df.tail(200).copy()
             k_data = {
+                'type':   stock_type,
                 'date':   plot_df.index.strftime('%m-%d').tolist(),
                 'open':   [round(float(x), 2) for x in plot_df['Open']],
                 'high':   [round(float(x), 2) for x in plot_df['High']],
@@ -446,10 +456,10 @@ def main():
 
     print(f"\n✅ 分析完成！")
     print(f"[報告] 淘汰報告：")
-    print(f"   - {filtered_out_by_ma}    檔因【均線未達多頭標準】被淘汰")
-    print(f"   - {filtered_out_by_timing} 檔因【籌碼未沉澱 / 無有效波段】被淘汰")
-    print(f"   - {filtered_out_by_volume} 檔因【成交量不足或未放量】被淘汰")
-    print(f"   - {filtered_out_by_inst}  檔因【法人未持續買超】被淘汰")
+    print(f"   - {filtered_out_by_ma}      檔因【均線條件不符（非A型漲後整理/非B型多頭排列）】被淘汰")
+    print(f"   - {filtered_out_by_segment} 檔因【無 10~15% 有效波段】被淘汰")
+    print(f"   - {filtered_out_by_volume}  檔因【成交量不足或未放量】被淘汰")
+    print(f"   - {filtered_out_by_inst}    檔因【外資/投信未持續買超】被淘汰")
     print(f"[結果] 最終找到 {len(final_payload)} 檔符合條件個股，K 線已打包進 uptrend_results.json")
     if failed_count > 0:
         print(f"⚠️ 有 {failed_count} 檔股票在計算時發生例外狀況被跳過")

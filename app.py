@@ -63,11 +63,24 @@ st.markdown(f"""
 # ==========================================
 all_results = data_store['results']
 name_map = data_store.get('name_map', {})
-symbol_list = sorted(list(all_results.keys()))
+
+# 型態選單
+type_options = {'全部': None, '漲後整理（型態A）': 'A', '多頭排列（型態B）': 'B'}
+selected_label = st.selectbox('型態選擇', list(type_options.keys()), index=0)
+selected_type = type_options[selected_label]
+
+if selected_type:
+    filtered = {k: v for k, v in all_results.items() if v.get('type') == selected_type}
+else:
+    filtered = all_results
+
+symbol_list = sorted(list(filtered.keys()))
 
 if not symbol_list:
     st.info("本次分析未發現符合條件的標的。")
     st.stop()
+
+all_results = filtered
 
 # ==========================================
 # 4. 繪圖渲染（雙欄極致看板模式）
@@ -119,7 +132,7 @@ for i, sym in enumerate(symbol_list):
             template="plotly_white",
             paper_bgcolor='white',
             plot_bgcolor='white',
-            title=dict(text=f"<b>{sym.replace('.TW','').replace('.TWO','')} {name_map.get(sym,'')}</b>", font=dict(color='black', size=22)),
+            title=dict(text=f"<b>{sym.replace('.TW','').replace('.TWO','')} {name_map.get(sym,'')} {'｜漲後整理' if k_data.get('type')=='A' else '｜多頭排列'}</b>", font=dict(color='black', size=22)),
             font=dict(color='black'),
             showlegend=False,
             dragmode=False,
