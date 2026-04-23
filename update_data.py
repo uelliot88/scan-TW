@@ -345,26 +345,20 @@ def get_institutional_flags(stock_code: str, inst_data: dict) -> dict:
 
 
 def check_volume(df) -> bool:
-    """
-    成交量篩選條件：
-    1. 近5日均量 > 800張（800,000 股）
-    2. 近5日均量 > 近20日均量 × 1.3
-    """
+    """流動性：近10日均量 ≥ 800張"""
+    if len(df) < 10:
+        return False
+    vol_10 = df['Volume'].iloc[-10:].mean()
+    return vol_10 >= MIN_VOLUME_LOTS * 1000
+
+
+def check_vol_surge(df) -> bool:
+    """放量標註：近5日均量 ≥ 近20日均量 × 1.6"""
     if len(df) < 20:
         return False
-
-    vol_5 = df['Volume'].iloc[-5:].mean()
+    vol_5  = df['Volume'].iloc[-5:].mean()
     vol_20 = df['Volume'].iloc[-20:].mean()
-
-    min_vol_shares = MIN_VOLUME_LOTS * 1000
-
-    if vol_5 < min_vol_shares:
-        return False
-
-    if vol_20 == 0 or vol_5 < vol_20 * VOLUME_SURGE_RATIO:
-        return False
-
-    return True
+    return vol_20 > 0 and vol_5 >= vol_20 * 1.6
 
 
 def main():
@@ -424,6 +418,9 @@ def main():
             # 法人標註（不篩選，僅記錄）
             inst_flags = get_institutional_flags(symbol, inst_data)
 
+            # 放量標註（不篩選，僅記錄）
+            vol_surge = bool(check_vol_surge(clean_df))
+
             # 用完整歷史計算均線，只取後 200 根 K 線輸出
             ma10 = clean_df['Close'].rolling(window=10).mean()
             ma20 = clean_df['Close'].rolling(window=20).mean()
@@ -437,6 +434,7 @@ def main():
                 'type':         stock_type,
                 'inst_foreign': inst_flags['foreign'],
                 'inst_trust':   inst_flags['trust'],
+                'vol_surge':    vol_surge,
                 'date':   plot_df.index.strftime('%m-%d').tolist(),
                 'open':   [round(float(x), 2) for x in plot_df['Open']],
                 'high':   [round(float(x), 2) for x in plot_df['High']],
