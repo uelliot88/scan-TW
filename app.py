@@ -88,15 +88,16 @@ all_results = filtered
 for i, sym in enumerate(symbol_list):
     try:
         k_data = all_results[sym]
-        plot_df = pd.DataFrame(k_data)
+        full_df = pd.DataFrame(k_data)
 
-        if plot_df.empty:
+        if full_df.empty:
             continue
 
-        # 均線由前端即時計算（節省 JSON 容量）
-        plot_df['MA10'] = plot_df['close'].rolling(window=10).mean()
-        plot_df['MA20'] = plot_df['close'].rolling(window=20).mean()
-        plot_df['MA60'] = plot_df['close'].rolling(window=60).mean()
+        # 用全部 260 根計算均線，再取後 200 根顯示
+        full_df['MA10'] = full_df['close'].rolling(window=10).mean()
+        full_df['MA20'] = full_df['close'].rolling(window=20).mean()
+        full_df['MA60'] = full_df['close'].rolling(window=60).mean()
+        plot_df = full_df.tail(200).reset_index(drop=True)
 
         fig = make_subplots(rows=2, cols=1, shared_xaxes=True,
                             row_heights=[0.8, 0.2], vertical_spacing=0.03)

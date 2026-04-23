@@ -424,8 +424,8 @@ def main():
             # 法人標註（不篩選，僅記錄）
             inst_flags = get_institutional_flags(symbol, inst_data)
 
-            # 打包最近 200 根 K 線
-            plot_df = clean_df.tail(200).copy()
+            # 打包最近 260 根 K 線（前 60 根供均線預熱，顯示後 200 根）
+            plot_df = clean_df.tail(260).copy()
             k_data = {
                 'type':         stock_type,
                 'inst_foreign': inst_flags['foreign'],
