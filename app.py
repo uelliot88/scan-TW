@@ -83,9 +83,25 @@ if not symbol_list:
 all_results = filtered
 
 # ==========================================
-# 4. 繪圖渲染（雙欄極致看板模式）
+# 4. 分頁設定
 # ==========================================
-for i, sym in enumerate(symbol_list):
+PAGE_SIZE = 40
+total = len(symbol_list)
+total_pages = (total + PAGE_SIZE - 1) // PAGE_SIZE
+
+col_info, col_page = st.columns([3, 1])
+with col_page:
+    page = st.selectbox('頁碼', list(range(1, total_pages + 1)), index=0, label_visibility='collapsed')
+with col_info:
+    st.markdown(f"<div style='font-size:0.9rem; color:#000; padding-top:6px;'>共 {total} 檔，第 {page}/{total_pages} 頁</div>", unsafe_allow_html=True)
+
+start = (page - 1) * PAGE_SIZE
+page_symbols = symbol_list[start:start + PAGE_SIZE]
+
+# ==========================================
+# 5. 繪圖渲染（雙欄極致看板模式）
+# ==========================================
+for i, sym in enumerate(page_symbols):
     try:
         k_data = all_results[sym]
         plot_df = pd.DataFrame(k_data)
@@ -162,7 +178,7 @@ for i, sym in enumerate(symbol_list):
             st.plotly_chart(
                 fig,
                 use_container_width=True,
-                key=f"fig_{sym}",
+                key=f"fig_{page}_{sym}",
                 theme=None,
                 config={
                     'toImageButtonOptions': {
@@ -181,4 +197,4 @@ for i, sym in enumerate(symbol_list):
         continue
 
 st.write("---")
-st.write("已經到底囉！")
+st.write(f"第 {page} 頁結束，共 {total_pages} 頁")
