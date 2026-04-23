@@ -83,7 +83,13 @@ if not symbol_list:
 all_results = filtered
 
 # ==========================================
-# 4. 分頁設定
+# 4. 收藏狀態初始化
+# ==========================================
+if 'selected' not in st.session_state:
+    st.session_state.selected = set()
+
+# ==========================================
+# 5. 分頁設定
 # ==========================================
 PAGE_SIZE = 40
 total = len(symbol_list)
@@ -98,8 +104,30 @@ with col_info:
 start = (page - 1) * PAGE_SIZE
 page_symbols = symbol_list[start:start + PAGE_SIZE]
 
+# 收藏下載列
+sel_count = len(st.session_state.selected)
+dl_col, clr_col, _ = st.columns([2, 1, 4])
+with dl_col:
+    if sel_count > 0:
+        tv_text = ','.join(
+            ('TWSE:' if s.endswith('.TW') else 'TPEX:') + s.replace('.TW', '').replace('.TWO', '')
+            for s in sorted(st.session_state.selected)
+        )
+        st.download_button(
+            f'⬇ 下載收藏清單（{sel_count} 檔）',
+            data=tv_text,
+            file_name='watchlist.txt',
+            mime='text/plain'
+        )
+    else:
+        st.markdown("<div style='padding-top:8px; font-size:0.85rem; color:#888;'>尚未勾選任何標的</div>", unsafe_allow_html=True)
+with clr_col:
+    if sel_count > 0 and st.button('清除全部'):
+        st.session_state.selected = set()
+        st.rerun()
+
 # ==========================================
-# 5. 繪圖渲染（雙欄極致看板模式）
+# 6. 繪圖渲染（雙欄極致看板模式）
 # ==========================================
 for i, sym in enumerate(page_symbols):
     try:
@@ -175,6 +203,16 @@ for i, sym in enumerate(page_symbols):
             cols = st.columns(2)
 
         with cols[i % 2]:
+            checked = st.checkbox(
+                f"{sym.replace('.TW','').replace('.TWO','')} {name_map.get(sym,'')}",
+                value=sym in st.session_state.selected,
+                key=f"chk_{page}_{sym}"
+            )
+            if checked:
+                st.session_state.selected.add(sym)
+            else:
+                st.session_state.selected.discard(sym)
+
             st.plotly_chart(
                 fig,
                 use_container_width=True,
