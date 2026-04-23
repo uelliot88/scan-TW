@@ -119,45 +119,9 @@ for i, sym in enumerate(symbol_list):
         fig.add_trace(go.Scatter(x=plot_df['date'], y=plot_df['MA60'],
                                  line=dict(color='#36b9cc', width=1), name='60MA'), row=1, col=1)
 
-        # 成交量黃色鏈（門檻固定用最近一根 MA20，避免早期低量誤觸）
-        vol_ma20_series = plot_df['volume'].rolling(window=20).mean()
-        recent_ma20 = vol_ma20_series.dropna().iloc[-1] if vol_ma20_series.dropna().size > 0 else None
-        trigger_vol = recent_ma20 * 2 if recent_ma20 else float('inf')
-        v_colors = []
-        chain_active = False
-        last_yellow_vol = None
-        bars_since_break = None
-        for c, o, vol in zip(plot_df['close'], plot_df['open'], plot_df['volume']):
-            normal_color = '#ef5350' if c >= o else '#26a69a'
-            if chain_active:
-                if vol >= last_yellow_vol * 1.5:
-                    v_colors.append('#FFD700')
-                    last_yellow_vol = vol
-                else:
-                    v_colors.append(normal_color)
-                    chain_active = False
-                    bars_since_break = 0
-            else:
-                if bars_since_break is not None:
-                    bars_since_break += 1
-                    if bars_since_break > 30:
-                        bars_since_break = None
-                        last_yellow_vol = None
-
-                can_restart = (
-                    bars_since_break is not None and
-                    last_yellow_vol is not None and
-                    vol >= last_yellow_vol * 1.5
-                )
-                can_new = vol >= trigger_vol
-
-                if can_restart or can_new:
-                    v_colors.append('#FFD700')
-                    last_yellow_vol = vol
-                    chain_active = True
-                    bars_since_break = None
-                else:
-                    v_colors.append(normal_color)
+        # 成交量
+        v_colors = ['#ef5350' if c >= o else '#26a69a'
+                    for c, o in zip(plot_df['close'], plot_df['open'])]
         fig.add_trace(go.Bar(x=plot_df['date'], y=plot_df['volume'],
                              marker_color=v_colors, name='量'), row=2, col=1)
 
