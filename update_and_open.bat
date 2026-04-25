@@ -8,16 +8,8 @@ echo  Taiwan Stock Scanner
 echo ================================================
 echo.
 echo [1/3] Updating data (takes ~10 mins)...
-echo       Downloading ~1967 stocks in 40 batches.
+echo       Downloading 1967 stocks in 40 batches.
 echo.
-
-if not exist "venv\Scripts\python.exe" (
-    echo [ERROR] venv not found. Please run setup first:
-    echo         python -m venv venv
-    echo         venv\Scripts\pip install -r requirements.txt
-    pause
-    exit /b 1
-)
 
 venv\Scripts\python update_data.py
 if errorlevel 1 (
