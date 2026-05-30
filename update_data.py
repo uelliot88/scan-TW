@@ -198,7 +198,7 @@ def check_type_b(df):
 
 
 def check_type_c_pullback_rebound(df):
-    """型態C：90日內高點較前低上漲50%後，回撤18-36%並反彈6%。"""
+    """型態C：90日內高點較前低上漲50%後，回撤18-36%並反彈8%。"""
     if len(df) < 90:
         return False
 
@@ -213,25 +213,27 @@ def check_type_c_pullback_rebound(df):
         return False
 
     after_high = recent.iloc[high_pos + 1:].copy()
-    low_pos_rel = int(np.argmin(after_high['Low'].to_numpy()))
-    low_price = float(after_high['Low'].iloc[low_pos_rel])
-    if low_price <= 0:
-        return False
+    for low_pos_rel in range(len(after_high) - 1):
+        low_price = float(after_high['Low'].iloc[low_pos_rel])
+        if low_price <= 0:
+            continue
 
-    drawdown = (high_price - low_price) / high_price
-    if drawdown < 0.18 or drawdown > 0.36:
-        return False
+        drawdown = (high_price - low_price) / high_price
+        if drawdown < 0.18 or drawdown > 0.36:
+            continue
 
-    after_low = after_high.iloc[low_pos_rel:].copy()
-    rebound = (float(after_low['High'].max()) - low_price) / low_price
-    if rebound < 0.06:
-        return False
+        after_low = after_high.iloc[low_pos_rel:].copy()
+        rebound = (float(after_low['High'].max()) - low_price) / low_price
+        if rebound < 0.08:
+            continue
 
-    lows_after_pullback = after_low['Low'].iloc[1:]
-    if len(lows_after_pullback) and float(lows_after_pullback.min()) < low_price:
-        return False
+        lows_after_pullback = after_low['Low'].iloc[1:]
+        if len(lows_after_pullback) and float(lows_after_pullback.min()) < low_price:
+            continue
 
-    return True
+        return True
+
+    return False
 
 
 def identify_uptrend(df, symbol):
