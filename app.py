@@ -387,11 +387,25 @@ def get_selected_theme_item(strong_themes, weak_themes):
 def get_selected_query_text():
     return ','.join(sorted(st.session_state.get('selected', set())))
 
+def get_query_value(key, default=''):
+    try:
+        raw_value = st.query_params.get(key)
+    except AttributeError:
+        raw_value = st.experimental_get_query_params().get(key)
+
+    if isinstance(raw_value, list):
+        raw_value = raw_value[0] if raw_value else default
+    return raw_value or default
+
 def build_page_href(page_number, theme_slug=None, include_theme=True):
     params = [f'page={page_number}']
     active_theme = get_selected_theme_slug() if theme_slug is None else theme_slug
     if include_theme and active_theme:
         params.append(f'theme={quote(active_theme)}')
+    if selected_type:
+        params.append(f'type={quote(selected_type)}')
+    if selected_sector != '全部產業':
+        params.append(f'sector={quote(selected_sector)}')
     selected_text = get_selected_query_text()
     if selected_text:
         params.append(f'selected={quote(selected_text)}')
@@ -434,13 +448,19 @@ filter_col1, filter_col2 = st.columns(2)
 
 with filter_col1:
     type_options = {'全部': None, '漲後整理（型態A）': 'A', '多頭排列（型態B）': 'B', '回撤反彈（例外C）': 'C'}
-    selected_label = st.selectbox('型態選擇', list(type_options.keys()), index=0)
+    query_type = get_query_value('type')
+    type_values = list(type_options.values())
+    type_labels = list(type_options.keys())
+    type_index = type_values.index(query_type) if query_type in type_values else 0
+    selected_label = st.selectbox('型態選擇', type_labels, index=type_index)
     selected_type = type_options[selected_label]
 
 with filter_col2:
     all_sectors = sorted({v for v in sector_map.values() if v})
     sector_options = ['全部產業'] + all_sectors
-    selected_sector = st.selectbox('產業類別', sector_options, index=0)
+    query_sector = get_query_value('sector')
+    sector_index = sector_options.index(query_sector) if query_sector in sector_options else 0
+    selected_sector = st.selectbox('產業類別', sector_options, index=sector_index)
 
 if selected_type:
     filtered = {k: v for k, v in all_results.items() if v.get('type') == selected_type}
@@ -502,6 +522,14 @@ def sync_selected_to_query():
         theme_slug = get_selected_theme_slug()
         if theme_slug:
             params['theme'] = theme_slug
+        if selected_type:
+            params['type'] = selected_type
+        else:
+            params.pop('type', None)
+        if selected_sector != '全部產業':
+            params['sector'] = selected_sector
+        else:
+            params.pop('sector', None)
         st.experimental_set_query_params(**params)
 
 def sync_selected_from_checkboxes():
@@ -557,6 +585,14 @@ def set_query_page(page_number):
         theme_slug = get_selected_theme_slug()
         if theme_slug:
             st.query_params['theme'] = theme_slug
+        if selected_type:
+            st.query_params['type'] = selected_type
+        elif 'type' in st.query_params:
+            del st.query_params['type']
+        if selected_sector != '全部產業':
+            st.query_params['sector'] = selected_sector
+        elif 'sector' in st.query_params:
+            del st.query_params['sector']
     except AttributeError:
         params = {'page': page_number}
         selected_text = get_selected_query_text()
@@ -565,6 +601,10 @@ def set_query_page(page_number):
         theme_slug = get_selected_theme_slug()
         if theme_slug:
             params['theme'] = theme_slug
+        if selected_type:
+            params['type'] = selected_type
+        if selected_sector != '全部產業':
+            params['sector'] = selected_sector
         st.experimental_set_query_params(**params)
 
 if 'current_page' not in st.session_state:

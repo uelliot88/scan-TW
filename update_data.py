@@ -198,11 +198,11 @@ def check_type_b(df):
 
 
 def check_type_c_pullback_rebound(df):
-    """型態C：120日內高點回撤18-36%後反彈6%，且未再跌破回撤低點。"""
-    if len(df) < 120:
+    """型態C：90日內高點回撤18-36%後反彈6%，且未再跌破回撤低點。"""
+    if len(df) < 90:
         return False
 
-    recent = df.tail(120).copy()
+    recent = df.tail(90).copy()
     high_pos = int(np.argmax(recent['High'].to_numpy()))
     high_price = float(recent['High'].iloc[high_pos])
     if high_price <= 0 or high_pos >= len(recent) - 2:
