@@ -657,7 +657,7 @@ def build_tradingview_watchlist(selected_symbols):
         lines.append('')
     return '\n'.join(lines).strip() + '\n'
 
-def build_xq_txt(selected_symbols):
+def build_xq_csv(selected_symbols):
     lines = [f'{normalize_code(sym)}.TW' for sym in sorted({str(item).upper() for item in selected_symbols})]
     return '\n'.join(lines) + ('\n' if lines else '')
 
@@ -676,10 +676,10 @@ def render_download_buttons(selected_symbols, count):
         )
     with xq_col:
         st.download_button(
-            f'⬇ XQ TXT（{count} 檔）',
-            data=('\ufeff' + build_xq_txt(selected_symbols)).encode('utf-8'),
-            file_name='xq_watchlist.txt',
-            mime='text/plain; charset=utf-8',
+            f'⬇ XQ CSV（{count} 檔）',
+            data=build_xq_csv(selected_symbols).encode('big5', errors='replace'),
+            file_name='xq_watchlist.csv',
+            mime='text/csv; charset=big5',
             key='download_xq_watchlist',
             on_click='ignore',
             use_container_width=True,
