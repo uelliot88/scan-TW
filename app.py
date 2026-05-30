@@ -5,8 +5,6 @@ from plotly.subplots import make_subplots
 import json
 import html
 import requests
-import hashlib
-from pathlib import Path
 from urllib.parse import quote, unquote
 
 APP_VERSION = "1.0"
@@ -623,27 +621,29 @@ def build_xq_csv(selected_symbols):
     lines = [f'{normalize_code(sym)}.TW' for sym in sorted({str(item).upper() for item in selected_symbols})]
     return '\n'.join(lines) + ('\n' if lines else '')
 
-def write_download_file(file_name, content):
-    download_dir = Path('static') / 'downloads'
-    download_dir.mkdir(parents=True, exist_ok=True)
-    digest = hashlib.sha1(content.encode('utf-8')).hexdigest()[:10]
-    stem, suffix = file_name.rsplit('.', 1)
-    output_path = download_dir / f'{stem}_{digest}.{suffix}'
-    output_path.write_text('\ufeff' + content, encoding='utf-8')
-    return f'app/static/downloads/{output_path.name}'
-
+@st.fragment
 def render_download_buttons(selected_symbols, count):
-    tv_href = write_download_file('watchlist.txt', build_tradingview_watchlist(selected_symbols))
-    xq_href = write_download_file('xq_watchlist.csv', build_xq_csv(selected_symbols))
-    st.markdown(
-        '<div class="download-actions">'
-        f'<a class="download-link" href="{html.escape(tv_href, quote=True)}" download="watchlist.txt" target="_self">'
-        f'{html.escape(f"⬇ TradingView清單（{count} 檔）")}</a>'
-        f'<a class="download-link" href="{html.escape(xq_href, quote=True)}" download="xq_watchlist.csv" target="_self">'
-        f'{html.escape(f"⬇ XQ CSV（{count} 檔）")}</a>'
-        '</div>',
-        unsafe_allow_html=True,
-    )
+    tv_col, xq_col = st.columns([1.45, 1.05], gap=None)
+    with tv_col:
+        st.download_button(
+            f'⬇ TradingView清單（{count} 檔）',
+            data=('\ufeff' + build_tradingview_watchlist(selected_symbols)).encode('utf-8'),
+            file_name='watchlist.txt',
+            mime='text/plain; charset=utf-8',
+            key='download_tradingview_watchlist',
+            on_click='ignore',
+            use_container_width=True,
+        )
+    with xq_col:
+        st.download_button(
+            f'⬇ XQ CSV（{count} 檔）',
+            data=('\ufeff' + build_xq_csv(selected_symbols)).encode('utf-8'),
+            file_name='xq_watchlist.csv',
+            mime='text/csv; charset=utf-8',
+            key='download_xq_watchlist',
+            on_click='ignore',
+            use_container_width=True,
+        )
 
 # 收藏下載列
 sel_count = len(st.session_state.selected)
