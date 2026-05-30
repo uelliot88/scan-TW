@@ -433,7 +433,7 @@ if 'selected' not in st.session_state:
 filter_col1, filter_col2 = st.columns(2)
 
 with filter_col1:
-    type_options = {'全部': None, '漲後整理（型態A）': 'A', '多頭排列（型態B）': 'B'}
+    type_options = {'全部': None, '漲後整理（型態A）': 'A', '多頭排列（型態B）': 'B', '回撤反彈（例外C）': 'C'}
     selected_label = st.selectbox('型態選擇', list(type_options.keys()), index=0)
     selected_type = type_options[selected_label]
 
@@ -743,9 +743,14 @@ for i, sym in enumerate(page_symbols):
         if sector and not any(line.startswith('產業別：') for line in tooltip_lines):
             tooltip_lines.append(f"產業別：{sector}")
         stock_note_html = html.escape('\n'.join(tooltip_lines) or '暫無市場主題').replace('\n', '<br>')
+        type_text = {
+            'A': '漲後整理',
+            'B': '多頭排列',
+            'C': '回撤反彈'
+        }.get(k_data.get('type'), '多頭排列')
         title_text = (
             f"{code} {stock_name}"
-            f" {'｜漲後整理' if k_data.get('type')=='A' else '｜多頭排列'}"
+            f" ｜{type_text}"
             f"{f'  [{sector}]' if sector else ''}"
             f"{'  🔵外資' if k_data.get('inst_foreign') else ''}"
             f"{'  🟢投信' if k_data.get('inst_trust') else ''}"

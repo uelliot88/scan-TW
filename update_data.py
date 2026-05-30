@@ -197,6 +197,39 @@ def check_type_b(df):
     return ma10 > ma20 > ma60
 
 
+def check_type_c_pullback_rebound(df):
+    """型態C：120日內高點回撤18-36%後反彈6%，且未再跌破回撤低點。"""
+    if len(df) < 120:
+        return False
+
+    recent = df.tail(120).copy()
+    high_pos = int(np.argmax(recent['High'].to_numpy()))
+    high_price = float(recent['High'].iloc[high_pos])
+    if high_price <= 0 or high_pos >= len(recent) - 2:
+        return False
+
+    after_high = recent.iloc[high_pos + 1:].copy()
+    low_pos_rel = int(np.argmin(after_high['Low'].to_numpy()))
+    low_price = float(after_high['Low'].iloc[low_pos_rel])
+    if low_price <= 0:
+        return False
+
+    drawdown = (high_price - low_price) / high_price
+    if drawdown < 0.18 or drawdown > 0.36:
+        return False
+
+    after_low = after_high.iloc[low_pos_rel:].copy()
+    rebound = (float(after_low['High'].max()) - low_price) / low_price
+    if rebound < 0.06:
+        return False
+
+    lows_after_pullback = after_low['Low'].iloc[1:]
+    if len(lows_after_pullback) and float(lows_after_pullback.min()) < low_price:
+        return False
+
+    return True
+
+
 def identify_uptrend(df, symbol):
     """【微觀波段識別演算法】"""
     if len(df) < LOOKBACK_PERIOD * 2:
@@ -435,13 +468,14 @@ def main():
             if len(clean_df) == 0:
                 continue
 
-            # 第一重：均線濾網（型態A 或 型態B）
+            # 第一重：型態濾網（型態A / 型態B / 例外型態C）
             is_a = check_type_a(clean_df)
             is_b = check_type_b(clean_df)
-            if not (is_a or is_b):
+            is_c = check_type_c_pullback_rebound(clean_df)
+            if not (is_a or is_b or is_c):
                 filtered_out_by_ma += 1
                 continue
-            stock_type = 'A' if is_a else 'B'
+            stock_type = 'A' if is_a else ('B' if is_b else 'C')
 
             # 第二重：波段識別（≥20%，不跌回起漲點）
             segments = identify_uptrend(clean_df, symbol)
