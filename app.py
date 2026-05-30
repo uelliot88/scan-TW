@@ -591,14 +591,16 @@ def build_xq_csv(selected_symbols):
 
 # 收藏下載列
 sel_count = len(st.session_state.selected)
-tv_col, xq_col, clr_col, _ = st.columns([2, 2, 1, 3])
+tv_col, xq_col, clr_col, _ = st.columns([1.45, 1.05, 0.9, 5.6], gap=None)
 with tv_col:
     if sel_count > 0:
         st.download_button(
             f'⬇ TradingView清單（{sel_count} 檔）',
-            data=build_tradingview_watchlist(st.session_state.selected),
+            data=build_tradingview_watchlist(st.session_state.selected).encode('utf-8-sig'),
             file_name='watchlist.txt',
-            mime='text/plain'
+            mime='text/plain',
+            key='download_tradingview_watchlist',
+            on_click='ignore',
         )
     else:
         st.markdown("<div style='padding-top:8px; font-size:0.85rem; color:#888;'>尚未勾選任何標的</div>", unsafe_allow_html=True)
@@ -606,9 +608,11 @@ with xq_col:
     if sel_count > 0:
         st.download_button(
             f'⬇ XQ CSV（{sel_count} 檔）',
-            data=build_xq_csv(st.session_state.selected),
+            data=build_xq_csv(st.session_state.selected).encode('utf-8-sig'),
             file_name='xq_watchlist.csv',
-            mime='text/csv'
+            mime='text/csv',
+            key='download_xq_watchlist',
+            on_click='ignore',
         )
 with clr_col:
     if sel_count > 0 and st.button('清除全部'):
