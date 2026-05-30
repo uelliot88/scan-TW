@@ -1,11 +1,11 @@
 import streamlit as st
+import streamlit.components.v1 as components
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import json
 import html
 import requests
-import base64
 from urllib.parse import quote, unquote
 
 APP_VERSION = "1.0"
@@ -622,36 +622,74 @@ def build_xq_csv(selected_symbols):
     lines = [f'{normalize_code(sym)}.TW' for sym in sorted({str(item).upper() for item in selected_symbols})]
     return '\n'.join(lines) + ('\n' if lines else '')
 
-def build_download_link(label, content, file_name, mime):
-    payload = base64.b64encode(content.encode('utf-8-sig')).decode('ascii')
-    return (
-        f'<a class="download-link" '
-        f'href="data:{mime};charset=utf-8;base64,{payload}" '
-        f'download="{html.escape(file_name, quote=True)}">'
-        f'{html.escape(label)}</a>'
-    )
+def render_download_buttons(selected_symbols):
+    tv_content = '\ufeff' + build_tradingview_watchlist(selected_symbols)
+    xq_content = '\ufeff' + build_xq_csv(selected_symbols)
+    buttons_html = f"""
+        <style>
+            body {{
+                margin: 0;
+                font-family: Arial, sans-serif;
+                overflow: hidden;
+            }}
+            .download-actions {{
+                display: flex;
+                align-items: center;
+                gap: 0;
+                height: 42px;
+            }}
+            .download-link {{
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                min-height: 38px;
+                padding: 0 14px;
+                border: 1px solid #d0d0d0;
+                border-radius: 6px;
+                background: #ffffff;
+                color: #000000;
+                font-size: 14px;
+                font-weight: 600;
+                line-height: 1;
+                text-decoration: none;
+                white-space: nowrap;
+                cursor: pointer;
+            }}
+            .download-link:hover {{
+                border-color: #000000;
+                background: #f7f7f7;
+            }}
+        </style>
+        <div class="download-actions">
+            <button class="download-link" type="button" onclick="downloadText('watchlist.txt', {json.dumps(tv_content)}, 'text/plain;charset=utf-8')">
+                {html.escape(f'⬇ TradingView清單（{sel_count} 檔）')}
+            </button>
+            <button class="download-link" type="button" onclick="downloadText('xq_watchlist.csv', {json.dumps(xq_content)}, 'text/csv;charset=utf-8')">
+                {html.escape(f'⬇ XQ CSV（{sel_count} 檔）')}
+            </button>
+        </div>
+        <script>
+            function downloadText(fileName, content, mimeType) {{
+                const blob = new Blob([content], {{ type: mimeType }});
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = fileName;
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+                setTimeout(() => URL.revokeObjectURL(url), 1000);
+            }}
+        </script>
+    """
+    components.html(buttons_html, height=44)
 
 # 收藏下載列
 sel_count = len(st.session_state.selected)
 dl_col, clr_col, _ = st.columns([2.55, 0.9, 5.55], gap=None)
 with dl_col:
     if sel_count > 0:
-        tv_link = build_download_link(
-            f'⬇ TradingView清單（{sel_count} 檔）',
-            build_tradingview_watchlist(st.session_state.selected),
-            'watchlist.txt',
-            'text/plain',
-        )
-        xq_link = build_download_link(
-            f'⬇ XQ CSV（{sel_count} 檔）',
-            build_xq_csv(st.session_state.selected),
-            'xq_watchlist.csv',
-            'text/csv',
-        )
-        st.markdown(
-            f'<div class="download-actions">{tv_link}{xq_link}</div>',
-            unsafe_allow_html=True,
-        )
+        render_download_buttons(st.session_state.selected)
     else:
         st.markdown("<div style='padding-top:8px; font-size:0.85rem; color:#888;'>尚未勾選任何標的</div>", unsafe_allow_html=True)
 with clr_col:
