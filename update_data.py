@@ -26,6 +26,41 @@ VOLUME_SURGE_RATIO = 1.3    # 量能增加倍數（近5日均量 ÷ 近20日均�
 INST_LOOKUP_DAYS = 7        # 法人資料回溯天數
 
 
+def is_stock_section(value):
+    label = str(value or '').strip()
+    return label in {'股票', '創新板'}
+
+
+def parse_isin_table(df, suffix):
+    tickers = []
+    name_map = {}
+    sector_map = {}
+    in_stock_section = False
+
+    for _, row in df.iterrows():
+        parts = str(row[0]).split()
+        if not parts:
+            continue
+
+        if not (parts[0].isdigit() and len(parts[0]) == 4):
+            in_stock_section = is_stock_section(row[0])
+            continue
+
+        if not in_stock_section or len(parts) < 2:
+            continue
+
+        ticker = parts[0] + suffix
+        tickers.append(ticker)
+        name_map[ticker] = parts[1]
+        sector_map[ticker] = str(row[4]).strip() if pd.notna(row[4]) else ''
+
+    return tickers, name_map, sector_map
+
+
+def merge_maps(target, source):
+    target.update(source)
+
+
 def load_concept_meta():
     try:
         with open('stock_concepts.json', 'r', encoding='utf-8') as f:
@@ -48,27 +83,13 @@ def get_tw_tickers():
 
     res_twse = requests.get("https://isin.twse.com.tw/isin/C_public.jsp?strMode=2", headers=headers, timeout=15)
     df_twse = pd.read_html(io.StringIO(res_twse.text))[0]
-    twse_tickers = []
-    name_map = {}
-    sector_map = {}
-    for _, row in df_twse.iterrows():
-        parts = str(row[0]).split()
-        if len(parts) >= 2 and parts[0].isdigit() and len(parts[0]) == 4:
-            ticker = parts[0] + '.TW'
-            twse_tickers.append(ticker)
-            name_map[ticker] = parts[1]
-            sector_map[ticker] = str(row[4]).strip() if pd.notna(row[4]) else ''
+    twse_tickers, name_map, sector_map = parse_isin_table(df_twse, '.TW')
 
     res_tpex = requests.get("https://isin.twse.com.tw/isin/C_public.jsp?strMode=4", headers=headers, timeout=15)
     df_tpex = pd.read_html(io.StringIO(res_tpex.text))[0]
-    tpex_tickers = []
-    for _, row in df_tpex.iterrows():
-        parts = str(row[0]).split()
-        if len(parts) >= 2 and parts[0].isdigit() and len(parts[0]) == 4:
-            ticker = parts[0] + '.TWO'
-            tpex_tickers.append(ticker)
-            name_map[ticker] = parts[1]
-            sector_map[ticker] = str(row[4]).strip() if pd.notna(row[4]) else ''
+    tpex_tickers, tpex_name_map, tpex_sector_map = parse_isin_table(df_tpex, '.TWO')
+    merge_maps(name_map, tpex_name_map)
+    merge_maps(sector_map, tpex_sector_map)
 
     all_tickers = twse_tickers + tpex_tickers
     print(f"共找到 {len(twse_tickers)} 檔上市, {len(tpex_tickers)} 檔上櫃")

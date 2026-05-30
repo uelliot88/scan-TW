@@ -1,11 +1,12 @@
 import streamlit as st
-import streamlit.components.v1 as components
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import json
 import html
 import requests
+import hashlib
+from pathlib import Path
 from urllib.parse import quote, unquote
 
 APP_VERSION = "1.0"
@@ -622,74 +623,34 @@ def build_xq_csv(selected_symbols):
     lines = [f'{normalize_code(sym)}.TW' for sym in sorted({str(item).upper() for item in selected_symbols})]
     return '\n'.join(lines) + ('\n' if lines else '')
 
-def render_download_buttons(selected_symbols):
-    tv_content = '\ufeff' + build_tradingview_watchlist(selected_symbols)
-    xq_content = '\ufeff' + build_xq_csv(selected_symbols)
-    buttons_html = f"""
-        <style>
-            body {{
-                margin: 0;
-                font-family: Arial, sans-serif;
-                overflow: hidden;
-            }}
-            .download-actions {{
-                display: flex;
-                align-items: center;
-                gap: 0;
-                height: 42px;
-            }}
-            .download-link {{
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                min-height: 38px;
-                padding: 0 14px;
-                border: 1px solid #d0d0d0;
-                border-radius: 6px;
-                background: #ffffff;
-                color: #000000;
-                font-size: 14px;
-                font-weight: 600;
-                line-height: 1;
-                text-decoration: none;
-                white-space: nowrap;
-                cursor: pointer;
-            }}
-            .download-link:hover {{
-                border-color: #000000;
-                background: #f7f7f7;
-            }}
-        </style>
-        <div class="download-actions">
-            <button class="download-link" type="button" onclick="downloadText('watchlist.txt', {json.dumps(tv_content)}, 'text/plain;charset=utf-8')">
-                {html.escape(f'⬇ TradingView清單（{sel_count} 檔）')}
-            </button>
-            <button class="download-link" type="button" onclick="downloadText('xq_watchlist.csv', {json.dumps(xq_content)}, 'text/csv;charset=utf-8')">
-                {html.escape(f'⬇ XQ CSV（{sel_count} 檔）')}
-            </button>
-        </div>
-        <script>
-            function downloadText(fileName, content, mimeType) {{
-                const blob = new Blob([content], {{ type: mimeType }});
-                const url = URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = fileName;
-                document.body.appendChild(link);
-                link.click();
-                link.remove();
-                setTimeout(() => URL.revokeObjectURL(url), 1000);
-            }}
-        </script>
-    """
-    components.html(buttons_html, height=44)
+def write_download_file(file_name, content):
+    download_dir = Path('static') / 'downloads'
+    download_dir.mkdir(parents=True, exist_ok=True)
+    digest = hashlib.sha1(content.encode('utf-8')).hexdigest()[:10]
+    stem, suffix = file_name.rsplit('.', 1)
+    output_path = download_dir / f'{stem}_{digest}.{suffix}'
+    output_path.write_text('\ufeff' + content, encoding='utf-8')
+    return f'app/static/downloads/{output_path.name}'
+
+def render_download_buttons(selected_symbols, count):
+    tv_href = write_download_file('watchlist.txt', build_tradingview_watchlist(selected_symbols))
+    xq_href = write_download_file('xq_watchlist.csv', build_xq_csv(selected_symbols))
+    st.markdown(
+        '<div class="download-actions">'
+        f'<a class="download-link" href="{html.escape(tv_href, quote=True)}" download="watchlist.txt" target="_self">'
+        f'{html.escape(f"⬇ TradingView清單（{count} 檔）")}</a>'
+        f'<a class="download-link" href="{html.escape(xq_href, quote=True)}" download="xq_watchlist.csv" target="_self">'
+        f'{html.escape(f"⬇ XQ CSV（{count} 檔）")}</a>'
+        '</div>',
+        unsafe_allow_html=True,
+    )
 
 # 收藏下載列
 sel_count = len(st.session_state.selected)
 dl_col, clr_col, _ = st.columns([2.55, 0.9, 5.55], gap=None)
 with dl_col:
     if sel_count > 0:
-        render_download_buttons(st.session_state.selected)
+        render_download_buttons(st.session_state.selected, sel_count)
     else:
         st.markdown("<div style='padding-top:8px; font-size:0.85rem; color:#888;'>尚未勾選任何標的</div>", unsafe_allow_html=True)
 with clr_col:
