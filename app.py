@@ -189,13 +189,13 @@ def fetch_market_themes():
         "Accept": "application/json",
     }
     params = {"markets": TWSTOCKFLOW_MARKETS}
-    ranking_resp = requests.get(
-        f"{TWSTOCKFLOW_API_BASE}/themes/ranking",
+    flow_resp = requests.get(
+        f"{TWSTOCKFLOW_API_BASE}/themes/flow",
         params=params,
         headers=headers,
         timeout=15,
     )
-    ranking_resp.raise_for_status()
+    flow_resp.raise_for_status()
     list_resp = requests.get(
         f"{TWSTOCKFLOW_API_BASE}/themes/list",
         params=params,
@@ -223,8 +223,8 @@ def fetch_market_themes():
             "market_count": int(row.get("stock_count") or len(stock_ids)),
         }
 
-    ranking = []
-    for row in ranking_resp.json().get("ranking", []):
+    themes = []
+    for row in flow_resp.json().get("sectors", []):
         name = str(row.get("sector", "")).strip()
         if not name:
             continue
@@ -233,7 +233,7 @@ def fetch_market_themes():
             strength = float(row.get("chg_1d"))
         except (TypeError, ValueError):
             strength = 0.0
-        ranking.append({
+        themes.append({
             "slug": catalog_item.get("slug") or name,
             "name": name,
             "strength": strength,
@@ -241,7 +241,7 @@ def fetch_market_themes():
             "market_count": catalog_item.get("market_count") or int(row.get("stock_count") or 0),
         })
 
-    return ranking
+    return themes
 
 data_store = load_analysis_results()
 
@@ -322,6 +322,8 @@ def build_theme_blocks(base_symbols):
             **item,
             "count": matched_count,
         })
+
+    items = [item for item in items if item["count"] > 0]
 
     strong = sorted(
         items,
