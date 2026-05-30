@@ -5,6 +5,7 @@ from plotly.subplots import make_subplots
 import json
 import html
 import requests
+import base64
 from urllib.parse import quote, unquote
 
 APP_VERSION = "1.0"
@@ -147,9 +148,39 @@ st.markdown("""
         color: #000000 !important;
         text-decoration: underline !important;
     }
+    .download-actions {
+        display: flex;
+        align-items: center;
+        gap: 0;
+        padding-top: 0;
+    }
+    .download-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 38px;
+        padding: 0 14px;
+        border: 1px solid #d0d0d0;
+        border-radius: 6px;
+        background: #ffffff;
+        color: #000000 !important;
+        font-size: 0.92rem;
+        font-weight: 600;
+        line-height: 1;
+        text-decoration: none !important;
+        white-space: nowrap;
+    }
+    .download-link + .download-link {
+        margin-left: 0;
+    }
+    .download-link:hover {
+        border-color: #000000;
+        background: #f7f7f7;
+    }
     @media (max-width: 900px) {
         .theme-board { grid-template-columns: 1fr; }
         .theme-block-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .download-actions { flex-wrap: wrap; }
     }
     </style>
     """, unsafe_allow_html=True)
@@ -591,31 +622,38 @@ def build_xq_csv(selected_symbols):
     lines = [f'{normalize_code(sym)}.TW' for sym in sorted({str(item).upper() for item in selected_symbols})]
     return '\n'.join(lines) + ('\n' if lines else '')
 
+def build_download_link(label, content, file_name, mime):
+    payload = base64.b64encode(content.encode('utf-8-sig')).decode('ascii')
+    return (
+        f'<a class="download-link" '
+        f'href="data:{mime};charset=utf-8;base64,{payload}" '
+        f'download="{html.escape(file_name, quote=True)}">'
+        f'{html.escape(label)}</a>'
+    )
+
 # 收藏下載列
 sel_count = len(st.session_state.selected)
-tv_col, xq_col, clr_col, _ = st.columns([1.45, 1.05, 0.9, 5.6], gap=None)
-with tv_col:
+dl_col, clr_col, _ = st.columns([2.55, 0.9, 5.55], gap=None)
+with dl_col:
     if sel_count > 0:
-        st.download_button(
+        tv_link = build_download_link(
             f'⬇ TradingView清單（{sel_count} 檔）',
-            data=build_tradingview_watchlist(st.session_state.selected).encode('utf-8-sig'),
-            file_name='watchlist.txt',
-            mime='text/plain',
-            key='download_tradingview_watchlist',
-            on_click='ignore',
+            build_tradingview_watchlist(st.session_state.selected),
+            'watchlist.txt',
+            'text/plain',
+        )
+        xq_link = build_download_link(
+            f'⬇ XQ CSV（{sel_count} 檔）',
+            build_xq_csv(st.session_state.selected),
+            'xq_watchlist.csv',
+            'text/csv',
+        )
+        st.markdown(
+            f'<div class="download-actions">{tv_link}{xq_link}</div>',
+            unsafe_allow_html=True,
         )
     else:
         st.markdown("<div style='padding-top:8px; font-size:0.85rem; color:#888;'>尚未勾選任何標的</div>", unsafe_allow_html=True)
-with xq_col:
-    if sel_count > 0:
-        st.download_button(
-            f'⬇ XQ CSV（{sel_count} 檔）',
-            data=build_xq_csv(st.session_state.selected).encode('utf-8-sig'),
-            file_name='xq_watchlist.csv',
-            mime='text/csv',
-            key='download_xq_watchlist',
-            on_click='ignore',
-        )
 with clr_col:
     if sel_count > 0 and st.button('清除全部'):
         st.session_state.selected = set()
