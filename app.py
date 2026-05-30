@@ -4,8 +4,12 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import json
 import html
+import requests
+from urllib.parse import quote, unquote
 
 APP_VERSION = "1.0"
+TWSTOCKFLOW_API_BASE = "https://twstockflow.aihost.dev/api/v1"
+TWSTOCKFLOW_MARKETS = "tse,otc"
 
 # ==========================================
 # 頁面與底色初始化
@@ -83,6 +87,70 @@ st.markdown("""
         visibility: visible;
         opacity: 1;
     }
+    .theme-board {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+        margin: 10px 0 14px;
+    }
+    .theme-panel-title {
+        font-size: 0.95rem;
+        font-weight: 900;
+        margin: 0 0 7px;
+    }
+    .theme-block-grid {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 8px;
+    }
+    .theme-block {
+        display: block;
+        min-height: 70px;
+        padding: 8px 9px;
+        border: 1px solid #d9d9d9;
+        border-radius: 6px;
+        background: #ffffff;
+        text-decoration: none !important;
+    }
+    .theme-block:hover {
+        border-color: #000000;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    }
+    .theme-block.active {
+        border: 2px solid #000000;
+    }
+    .theme-block-name {
+        display: block;
+        font-size: 0.85rem;
+        font-weight: 900;
+        line-height: 1.25;
+        margin-bottom: 5px;
+        word-break: break-word;
+    }
+    .theme-block-meta {
+        display: block;
+        font-size: 0.75rem;
+        line-height: 1.35;
+    }
+    .theme-strong .theme-block-meta strong {
+        color: #E32636 !important;
+    }
+    .theme-weak .theme-block-meta strong {
+        color: #008F39 !important;
+    }
+    .theme-selected-bar {
+        font-size: 0.9rem;
+        font-weight: 800;
+        margin: 8px 0 12px;
+    }
+    .theme-selected-bar a {
+        color: #000000 !important;
+        text-decoration: underline !important;
+    }
+    @media (max-width: 900px) {
+        .theme-board { grid-template-columns: 1fr; }
+        .theme-block-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
     </style>
     """, unsafe_allow_html=True)
 
@@ -113,6 +181,67 @@ def load_stock_concepts():
 
     concepts = data.get('stock_concepts', data) if isinstance(data, dict) else {}
     return concepts if isinstance(concepts, dict) else {}
+
+@st.cache_data(ttl=900, show_spinner=False)
+def fetch_market_themes():
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+        "Accept": "application/json",
+    }
+    params = {"markets": TWSTOCKFLOW_MARKETS}
+    ranking_resp = requests.get(
+        f"{TWSTOCKFLOW_API_BASE}/themes/ranking",
+        params=params,
+        headers=headers,
+        timeout=15,
+    )
+    ranking_resp.raise_for_status()
+    list_resp = requests.get(
+        f"{TWSTOCKFLOW_API_BASE}/themes/list",
+        params=params,
+        headers=headers,
+        timeout=15,
+    )
+    list_resp.raise_for_status()
+
+    theme_list = list_resp.json().get("themes", [])
+    theme_catalog = {}
+    for row in theme_list:
+        name = str(row.get("theme", "")).strip()
+        if not name:
+            continue
+        slug = str(row.get("theme_slug") or name).strip()
+        stock_ids = {
+            str(stock_id).strip()
+            for stock_id in row.get("stock_ids", [])
+            if str(stock_id).strip()
+        }
+        theme_catalog[name] = {
+            "slug": slug,
+            "name": name,
+            "stock_ids": stock_ids,
+            "market_count": int(row.get("stock_count") or len(stock_ids)),
+        }
+
+    ranking = []
+    for row in ranking_resp.json().get("ranking", []):
+        name = str(row.get("sector", "")).strip()
+        if not name:
+            continue
+        catalog_item = theme_catalog.get(name, {})
+        try:
+            strength = float(row.get("chg_1d"))
+        except (TypeError, ValueError):
+            strength = 0.0
+        ranking.append({
+            "slug": catalog_item.get("slug") or name,
+            "name": name,
+            "strength": strength,
+            "stock_ids": catalog_item.get("stock_ids", set()),
+            "market_count": catalog_item.get("market_count") or int(row.get("stock_count") or 0),
+        })
+
+    return ranking
 
 data_store = load_analysis_results()
 
@@ -164,6 +293,110 @@ def get_stock_concepts(symbol, code):
         concepts = [concepts]
     return [str(item).strip() for item in concepts if str(item).strip()]
 
+def normalize_code(symbol):
+    return str(symbol).upper().replace('.TWO', '').replace('.TW', '')
+
+def get_selected_theme_slug():
+    try:
+        raw_theme = st.query_params.get('theme')
+    except AttributeError:
+        raw_theme = st.experimental_get_query_params().get('theme')
+
+    if isinstance(raw_theme, list):
+        raw_theme = raw_theme[0] if raw_theme else ''
+    return unquote(raw_theme or '')
+
+def build_theme_blocks(base_symbols):
+    base_codes = {normalize_code(sym) for sym in base_symbols}
+    try:
+        market_themes = fetch_market_themes()
+    except Exception as exc:
+        st.warning(f"今日族群資料暫時無法載入：{exc}")
+        return [], []
+
+    items = []
+    for item in market_themes:
+        stock_ids = set(item.get("stock_ids") or [])
+        matched_count = len(base_codes & stock_ids) if stock_ids else 0
+        items.append({
+            **item,
+            "count": matched_count,
+        })
+
+    strong = sorted(
+        items,
+        key=lambda item: (item["strength"], item["market_count"], item["name"]),
+        reverse=True,
+    )[:5]
+    weak = sorted(
+        items,
+        key=lambda item: (item["strength"], -item["market_count"], item["name"]),
+    )[:5]
+    return strong, weak
+
+def theme_matches_symbol(theme_item, symbol):
+    return normalize_code(symbol) in set(theme_item.get("stock_ids") or [])
+
+def get_selected_theme_item(strong_themes, weak_themes):
+    selected_theme_slug = get_selected_theme_slug()
+    if not selected_theme_slug:
+        return None
+    for item in strong_themes + weak_themes:
+        if item.get("slug") == selected_theme_slug:
+            return item
+    try:
+        for item in fetch_market_themes():
+            if item.get("slug") == selected_theme_slug:
+                return item
+    except Exception:
+        return None
+    return None
+
+def get_selected_query_text():
+    return ','.join(sorted(st.session_state.get('selected', set())))
+
+def build_page_href(page_number, theme_slug=None, include_theme=True):
+    params = [f'page={page_number}']
+    active_theme = get_selected_theme_slug() if theme_slug is None else theme_slug
+    if include_theme and active_theme:
+        params.append(f'theme={quote(active_theme)}')
+    selected_text = get_selected_query_text()
+    if selected_text:
+        params.append(f'selected={quote(selected_text)}')
+    return '?' + '&'.join(params)
+
+def render_theme_blocks(title, items, css_class):
+    selected_theme_slug = get_selected_theme_slug()
+    blocks = []
+    for item in items:
+        active_class = ' active' if item['slug'] == selected_theme_slug else ''
+        href = build_page_href(1, theme_slug=item['slug'])
+        blocks.append(
+            f'<a class="theme-block {css_class}{active_class}" href="{href}" target="_self">'
+            f'<span class="theme-block-name">{html.escape(item["name"])}</span>'
+            f'<span class="theme-block-meta"><strong>{item["strength"]:+.2f}%</strong><br>篩出 {item["count"]} 檔</span>'
+            '</a>'
+        )
+    st.markdown(
+        f'<div><div class="theme-panel-title">{html.escape(title)}</div>'
+        f'<div class="theme-block-grid">{"".join(blocks)}</div></div>',
+        unsafe_allow_html=True,
+    )
+
+# 先初始化收藏，讓主題/分頁連結能保留 selected query param
+if 'selected' not in st.session_state:
+    try:
+        raw_selected = st.query_params.get('selected')
+    except AttributeError:
+        raw_selected = st.experimental_get_query_params().get('selected')
+    if isinstance(raw_selected, list):
+        raw_selected = raw_selected[0] if raw_selected else ''
+    st.session_state.selected = {
+        item.strip().upper()
+        for item in str(raw_selected or '').split(',')
+        if item.strip()
+    }
+
 # 篩選列
 filter_col1, filter_col2 = st.columns(2)
 
@@ -175,7 +408,7 @@ with filter_col1:
 with filter_col2:
     all_sectors = sorted({v for v in sector_map.values() if v})
     sector_options = ['全部產業'] + all_sectors
-    selected_sector = st.selectbox('產業別', sector_options, index=0)
+    selected_sector = st.selectbox('產業類別', sector_options, index=0)
 
 if selected_type:
     filtered = {k: v for k, v in all_results.items() if v.get('type') == selected_type}
@@ -184,6 +417,28 @@ else:
 
 if selected_sector != '全部產業':
     filtered = {k: v for k, v in filtered.items() if v.get('sector') == selected_sector}
+
+base_filtered = filtered
+strong_themes, weak_themes = build_theme_blocks(base_filtered.keys())
+if strong_themes or weak_themes:
+    strong_col, weak_col = st.columns(2)
+    with strong_col:
+        render_theme_blocks('今日領漲族群', strong_themes, 'theme-strong')
+    with weak_col:
+        render_theme_blocks('今日領跌族群', weak_themes, 'theme-weak')
+
+selected_theme_item = get_selected_theme_item(strong_themes, weak_themes)
+if selected_theme_item:
+    clear_href = build_page_href(1, include_theme=False)
+    st.markdown(
+        f'<div class="theme-selected-bar">目前主題：{html.escape(selected_theme_item["name"])}'
+        f' ｜ <a href="{clear_href}" target="_self">清除主題</a></div>',
+        unsafe_allow_html=True,
+    )
+    filtered = {
+        k: v for k, v in base_filtered.items()
+        if theme_matches_symbol(selected_theme_item, k)
+    }
 
 symbol_list = sorted(list(filtered.keys()))
 
@@ -199,6 +454,24 @@ all_results = filtered
 if 'selected' not in st.session_state:
     st.session_state.selected = set()
 
+def sync_selected_to_query():
+    selected_text = get_selected_query_text()
+    try:
+        if selected_text:
+            st.query_params['selected'] = selected_text
+        elif 'selected' in st.query_params:
+            del st.query_params['selected']
+    except AttributeError:
+        params = st.experimental_get_query_params()
+        if selected_text:
+            params['selected'] = selected_text
+        else:
+            params.pop('selected', None)
+        theme_slug = get_selected_theme_slug()
+        if theme_slug:
+            params['theme'] = theme_slug
+        st.experimental_set_query_params(**params)
+
 def sync_selected_from_checkboxes():
     selected = set(st.session_state.selected)
     prefix = 'chk_'
@@ -211,12 +484,14 @@ def sync_selected_from_checkboxes():
         else:
             selected.discard(sym)
     st.session_state.selected = selected
+    sync_selected_to_query()
 
 def toggle_selected(sym):
     if st.session_state.get(f'chk_{sym}', False):
         st.session_state.selected.add(sym)
     else:
         st.session_state.selected.discard(sym)
+    sync_selected_to_query()
 
 # ==========================================
 # 5. 分頁設定
@@ -242,8 +517,23 @@ def get_query_page():
 def set_query_page(page_number):
     try:
         st.query_params['page'] = str(page_number)
+        selected_text = get_selected_query_text()
+        if selected_text:
+            st.query_params['selected'] = selected_text
+        elif 'selected' in st.query_params:
+            del st.query_params['selected']
+        theme_slug = get_selected_theme_slug()
+        if theme_slug:
+            st.query_params['theme'] = theme_slug
     except AttributeError:
-        st.experimental_set_query_params(page=page_number)
+        params = {'page': page_number}
+        selected_text = get_selected_query_text()
+        if selected_text:
+            params['selected'] = selected_text
+        theme_slug = get_selected_theme_slug()
+        if theme_slug:
+            params['theme'] = theme_slug
+        st.experimental_set_query_params(**params)
 
 if 'current_page' not in st.session_state:
     st.session_state.current_page = 1
@@ -269,26 +559,64 @@ start = (page - 1) * PAGE_SIZE
 page_symbols = symbol_list[start:start + PAGE_SIZE]
 sync_selected_from_checkboxes()
 
+def get_export_industry(symbol):
+    stock_data = data_store.get('results', {}).get(symbol, {})
+    industry = (
+        sector_map.get(symbol)
+        or stock_data.get('sector')
+        or '未分類'
+    )
+    return str(industry).strip() or '未分類'
+
+def to_tradingview_symbol(symbol):
+    code = normalize_code(symbol)
+    return ('TWSE:' if str(symbol).upper().endswith('.TW') else 'TPEX:') + code
+
+def build_tradingview_watchlist(selected_symbols):
+    groups = {}
+    for sym in sorted({str(item).upper() for item in selected_symbols}):
+        industry_label = get_export_industry(sym)
+        groups.setdefault(industry_label, []).append(to_tradingview_symbol(sym))
+
+    lines = []
+    for industry_label in sorted(groups):
+        lines.append(f'###{industry_label}###')
+        lines.append(','.join(groups[industry_label]))
+        lines.append('')
+    return '\n'.join(lines).strip() + '\n'
+
+def build_xq_csv(selected_symbols):
+    lines = [f'{normalize_code(sym)}.TW' for sym in sorted({str(item).upper() for item in selected_symbols})]
+    return '\n'.join(lines) + ('\n' if lines else '')
+
 # 收藏下載列
 sel_count = len(st.session_state.selected)
-dl_col, clr_col, _ = st.columns([2, 1, 4])
-with dl_col:
+tv_col, xq_col, clr_col, _ = st.columns([2, 2, 1, 3])
+with tv_col:
     if sel_count > 0:
-        tv_text = ','.join(
-            ('TWSE:' if s.endswith('.TW') else 'TPEX:') + s.replace('.TWO', '').replace('.TW', '')
-            for s in sorted(st.session_state.selected)
-        )
         st.download_button(
-            f'⬇ 下載收藏清單（{sel_count} 檔）',
-            data=tv_text,
+            f'⬇ TradingView清單（{sel_count} 檔）',
+            data=build_tradingview_watchlist(st.session_state.selected),
             file_name='watchlist.txt',
             mime='text/plain'
         )
     else:
         st.markdown("<div style='padding-top:8px; font-size:0.85rem; color:#888;'>尚未勾選任何標的</div>", unsafe_allow_html=True)
+with xq_col:
+    if sel_count > 0:
+        st.download_button(
+            f'⬇ XQ CSV（{sel_count} 檔）',
+            data=build_xq_csv(st.session_state.selected),
+            file_name='xq_watchlist.csv',
+            mime='text/csv'
+        )
 with clr_col:
     if sel_count > 0 and st.button('清除全部'):
         st.session_state.selected = set()
+        for key in list(st.session_state.keys()):
+            if key.startswith('chk_'):
+                st.session_state[key] = False
+        sync_selected_to_query()
         st.rerun()
 
 # ==========================================
@@ -439,7 +767,7 @@ page_range = get_page_range(page, total_pages)
 # 底部右對齊導覽：純文字連結，target=_self 保持在同一個視窗切換
 nav_items = []
 if page > 1:
-    nav_items.append(f'<a href="?page={page - 1}" target="_self">◀ 前一頁</a>')
+    nav_items.append(f'<a href="{build_page_href(page - 1)}" target="_self">◀ 前一頁</a>')
 else:
     nav_items.append('<span class="disabled-page">◀ 前一頁</span>')
 
@@ -449,10 +777,10 @@ for p in page_range:
     elif p == page:
         nav_items.append(f'<span class="current-page">{p}</span>')
     else:
-        nav_items.append(f'<a href="?page={p}" target="_self">{p}</a>')
+        nav_items.append(f'<a href="{build_page_href(p)}" target="_self">{p}</a>')
 
 if page < total_pages:
-    nav_items.append(f'<a href="?page={page + 1}" target="_self">下一頁 ▶</a>')
+    nav_items.append(f'<a href="{build_page_href(page + 1)}" target="_self">下一頁 ▶</a>')
 else:
     nav_items.append('<span class="disabled-page">下一頁 ▶</span>')
 
