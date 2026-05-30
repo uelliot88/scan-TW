@@ -659,7 +659,7 @@ def build_tradingview_watchlist(selected_symbols):
 
 def build_xq_csv(selected_symbols):
     lines = [f'{normalize_code(sym)}.TW' for sym in sorted({str(item).upper() for item in selected_symbols})]
-    return '\n'.join(lines) + ('\n' if lines else '')
+    return '\r\n'.join(lines) + ('\r\n' if lines else '')
 
 @st.fragment
 def render_download_buttons(selected_symbols, count):
