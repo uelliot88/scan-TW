@@ -4,12 +4,9 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import json
 import html
-import requests
 from urllib.parse import quote, unquote
 
 APP_VERSION = "1.0"
-TWSTOCKFLOW_API_BASE = "https://twstockflow.aihost.dev/api/v1"
-TWSTOCKFLOW_MARKETS = "tse,otc"
 
 # ==========================================
 # 頁面與底色初始化
@@ -202,76 +199,24 @@ def load_stock_notes():
     except FileNotFoundError:
         return {}
 
-def load_stock_concepts():
+def load_stock_concepts_data():
     try:
         with open('stock_concepts.json', 'r', encoding='utf-8') as f:
             data = json.load(f)
     except FileNotFoundError:
         return {}
 
+    return data if isinstance(data, dict) else {}
+
+def load_stock_concepts():
+    data = load_stock_concepts_data()
     concepts = data.get('stock_concepts', data) if isinstance(data, dict) else {}
     return concepts if isinstance(concepts, dict) else {}
 
-@st.cache_data(ttl=900, show_spinner=False)
-def fetch_market_themes():
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
-        "Accept": "application/json",
-    }
-    params = {"markets": TWSTOCKFLOW_MARKETS}
-    flow_resp = requests.get(
-        f"{TWSTOCKFLOW_API_BASE}/themes/flow",
-        params=params,
-        headers=headers,
-        timeout=15,
-    )
-    flow_resp.raise_for_status()
-    list_resp = requests.get(
-        f"{TWSTOCKFLOW_API_BASE}/themes/list",
-        params=params,
-        headers=headers,
-        timeout=15,
-    )
-    list_resp.raise_for_status()
-
-    theme_list = list_resp.json().get("themes", [])
-    theme_catalog = {}
-    for row in theme_list:
-        name = str(row.get("theme", "")).strip()
-        if not name:
-            continue
-        slug = str(row.get("theme_slug") or name).strip()
-        stock_ids = {
-            str(stock_id).strip()
-            for stock_id in row.get("stock_ids", [])
-            if str(stock_id).strip()
-        }
-        theme_catalog[name] = {
-            "slug": slug,
-            "name": name,
-            "stock_ids": stock_ids,
-            "market_count": int(row.get("stock_count") or len(stock_ids)),
-        }
-
-    themes = []
-    for row in flow_resp.json().get("sectors", []):
-        name = str(row.get("sector", "")).strip()
-        if not name:
-            continue
-        catalog_item = theme_catalog.get(name, {})
-        try:
-            strength = float(row.get("chg_1d"))
-        except (TypeError, ValueError):
-            strength = 0.0
-        themes.append({
-            "slug": catalog_item.get("slug") or name,
-            "name": name,
-            "strength": strength,
-            "stock_ids": catalog_item.get("stock_ids", set()),
-            "market_count": catalog_item.get("market_count") or int(row.get("stock_count") or 0),
-        })
-
-    return themes
+def load_market_themes():
+    data = load_stock_concepts_data()
+    themes = data.get('market_theme_rankings', []) if isinstance(data, dict) else []
+    return themes if isinstance(themes, list) else []
 
 data_store = load_analysis_results()
 
@@ -301,6 +246,7 @@ sector_map = data_store.get('sector_map', {})
 business_map = data_store.get('business_map', {})
 stock_notes = load_stock_notes()
 stock_concepts = load_stock_concepts()
+market_themes = load_market_themes()
 
 def get_stock_note(symbol, code, sector):
     note = (
@@ -338,15 +284,14 @@ def get_selected_theme_slug():
 
 def build_theme_blocks(base_symbols):
     base_codes = {normalize_code(sym) for sym in base_symbols}
-    try:
-        market_themes = fetch_market_themes()
-    except Exception as exc:
-        st.warning(f"今日族群資料暫時無法載入：{exc}")
-        return [], []
 
     items = []
     for item in market_themes:
-        stock_ids = set(item.get("stock_ids") or [])
+        stock_ids = {
+            normalize_code(stock_id)
+            for stock_id in item.get("stock_ids", [])
+            if str(stock_id).strip()
+        }
         matched_count = len(base_codes & stock_ids) if stock_ids else 0
         items.append({
             **item,
@@ -376,12 +321,9 @@ def get_selected_theme_item(strong_themes, weak_themes):
     for item in strong_themes + weak_themes:
         if item.get("slug") == selected_theme_slug:
             return item
-    try:
-        for item in fetch_market_themes():
-            if item.get("slug") == selected_theme_slug:
-                return item
-    except Exception:
-        return None
+    for item in market_themes:
+        if item.get("slug") == selected_theme_slug:
+            return item
     return None
 
 def get_selected_query_text():
