@@ -6,7 +6,7 @@ import json
 import html
 from urllib.parse import quote, unquote
 
-APP_VERSION = "1.0"
+APP_VERSION = "1.5"
 
 # ==========================================
 # 頁面與底色初始化
