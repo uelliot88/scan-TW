@@ -586,21 +586,26 @@ def to_tradingview_symbol(symbol):
     code = normalize_code(symbol)
     return ('TWSE:' if str(symbol).upper().endswith('.TW') else 'TPEX:') + code
 
-def build_tradingview_watchlist(selected_symbols):
+def build_export_groups(selected_symbols):
     groups = {}
     for sym in sorted({str(item).upper() for item in selected_symbols}):
         industry_label = get_export_industry(sym)
-        groups.setdefault(industry_label, []).append(to_tradingview_symbol(sym))
+        groups.setdefault(industry_label, []).append(sym)
+    return [(industry_label, groups[industry_label]) for industry_label in sorted(groups)]
 
+def build_tradingview_watchlist(selected_symbols):
     lines = []
-    for industry_label in sorted(groups):
+    for industry_label, symbols in build_export_groups(selected_symbols):
         lines.append(f'###{industry_label},')
-        lines.append(','.join(groups[industry_label]) + ',')
+        lines.append(','.join(to_tradingview_symbol(sym) for sym in symbols) + ',')
         lines.append('')
     return '\n'.join(lines).strip() + '\n'
 
 def build_xq_csv(selected_symbols):
-    lines = [f'{normalize_code(sym)}.TW' for sym in sorted({str(item).upper() for item in selected_symbols})]
+    lines = []
+    for industry_label, symbols in build_export_groups(selected_symbols):
+        lines.append(f'分類:{industry_label}')
+        lines.extend(f'{normalize_code(sym)}.TW' for sym in symbols)
     return '\r\n'.join(lines) + ('\r\n' if lines else '')
 
 @st.fragment
@@ -618,7 +623,7 @@ def render_download_buttons(selected_symbols, count):
         )
     with xq_col:
         st.download_button(
-            f'⬇ XQ CSV（{count} 檔）',
+            f'⬇ XQ清單（{count} 檔）',
             data=build_xq_csv(selected_symbols).encode('big5', errors='replace'),
             file_name='xq_watchlist.csv',
             mime='text/csv; charset=big5',
