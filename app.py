@@ -604,7 +604,7 @@ def build_tradingview_watchlist(selected_symbols):
 def build_xq_csv(selected_symbols):
     lines = []
     for industry_label, symbols in build_export_groups(selected_symbols):
-        lines.append(industry_label)
+        lines.append(f'{industry_label}:')
         lines.extend(f'{normalize_code(sym)}.TW' for sym in symbols)
     return '\r\n'.join(lines) + ('\r\n' if lines else '')
 
