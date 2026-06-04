@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-04 15:08:54",
+  "last_updated": "2026-06-04 19:52:40",
   "total_symbols_found": 388,
   "name_map": {
     "1303.TW": "南亞",
@@ -782,10 +782,10 @@
     "8383.TWO": "半導體業"
   },
   "concept_meta": {
-    "latest_trade_date": "2026-05-29",
-    "generated_at": "2026-05-31 11:17:25",
+    "latest_trade_date": "2026-06-04",
+    "generated_at": "2026-06-04 19:50:12",
     "theme_count": 144,
-    "stock_count": 1981
+    "stock_count": 1982
   },
   "results": {
     "1303.TW": {
@@ -69734,7 +69734,7 @@
         2333.0
       ],
       "ma20": [
-        1119.6,
+        1119.59,
         1124.05,
         1127.76,
         1131.72,
