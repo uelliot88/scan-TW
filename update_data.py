@@ -177,13 +177,15 @@ def _check_base(df, temp_df, recent_df):
 
 
 def check_type_a(df):
-    """型態A：漲後整理 — 收盤 > MA60 且 MA10/MA20 均線糾結（差距 ≤ 3%）"""
+    """型態A：漲後整理 — 收盤 > MA60 且近10日 MA10/MA20 均線糾結（差距 ≤ 3%）"""
     temp_df, recent_df = _build_ma_df(df)
     if not _check_base(df, temp_df, recent_df):
         return False
-    ma10 = float(temp_df['MA10'].iloc[-1])
-    ma20 = float(temp_df['MA20'].iloc[-1])
-    return abs(ma10 - ma20) / ma20 <= 0.03
+    spread_df = temp_df[['MA10', 'MA20']].dropna().tail(10)
+    if len(spread_df) < 10:
+        return False
+    spread = (spread_df['MA10'] - spread_df['MA20']).abs() / spread_df['MA20']
+    return bool((spread <= 0.03).all())
 
 
 def check_type_b(df):
@@ -198,11 +200,11 @@ def check_type_b(df):
 
 
 def check_type_c_pullback_rebound(df):
-    """型態C：90日內高點較前低上漲50%後，回撤18-36%並反彈8%。"""
-    if len(df) < 90:
+    """型態C：65日內高點較前低上漲50%後，回撤16-36%並反彈8%。"""
+    if len(df) < 65:
         return False
 
-    recent = df.tail(90).copy()
+    recent = df.tail(65).copy()
     high_pos = int(np.argmax(recent['High'].to_numpy()))
     high_price = float(recent['High'].iloc[high_pos])
     if high_price <= 0 or high_pos >= len(recent) - 2:
@@ -219,11 +221,15 @@ def check_type_c_pullback_rebound(df):
             continue
 
         drawdown = (high_price - low_price) / high_price
-        if drawdown < 0.18 or drawdown > 0.36:
+        if drawdown < 0.16 or drawdown > 0.36:
             continue
 
         after_low = after_high.iloc[low_pos_rel:].copy()
-        rebound = (float(after_low['High'].max()) - low_price) / low_price
+        rebound_high = float(after_low['High'].max())
+        if rebound_high > high_price:
+            continue
+
+        rebound = (rebound_high - low_price) / low_price
         if rebound < 0.08:
             continue
 
@@ -474,14 +480,14 @@ def main():
             if len(clean_df) == 0:
                 continue
 
-            # 第一重：型態濾網（型態A / 型態B / 例外型態C）
+            # 第一重：型態濾網（型態A / 型態B / 型態C）
             is_a = check_type_a(clean_df)
             is_b = check_type_b(clean_df)
             is_c = check_type_c_pullback_rebound(clean_df)
             if not (is_a or is_b or is_c):
                 filtered_out_by_ma += 1
                 continue
-            stock_type = 'A' if is_a else ('B' if is_b else 'C')
+            stock_type = 'C' if is_c else ('A' if is_a else 'B')
 
             # 第二重：波段識別（≥20%，不跌回起漲點）
             segments = identify_uptrend(clean_df, symbol)

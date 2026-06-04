@@ -6,7 +6,7 @@ import json
 import html
 from urllib.parse import quote, unquote
 
-APP_VERSION = "1.5"
+APP_VERSION = "1.8"
 
 # ==========================================
 # 頁面與底色初始化
@@ -282,20 +282,13 @@ def get_selected_theme_slug():
         raw_theme = raw_theme[0] if raw_theme else ''
     return unquote(raw_theme or '')
 
-def build_theme_blocks(base_symbols):
-    base_codes = {normalize_code(sym) for sym in base_symbols}
-
+def build_theme_blocks(_base_symbols=None):
     items = []
     for item in market_themes:
-        stock_ids = {
-            normalize_code(stock_id)
-            for stock_id in item.get("stock_ids", [])
-            if str(stock_id).strip()
-        }
-        matched_count = len(base_codes & stock_ids) if stock_ids else 0
+        market_count = int(item.get("market_count") or len(item.get("stock_ids") or []))
         items.append({
             **item,
-            "count": matched_count,
+            "count": market_count,
         })
 
     items = [item for item in items if item["count"] > 0]
@@ -362,7 +355,7 @@ def render_theme_blocks(title, items, css_class):
         blocks.append(
             f'<a class="theme-block {css_class}{active_class}" href="{href}" target="_self">'
             f'<span class="theme-block-name">{html.escape(item["name"])}</span>'
-            f'<span class="theme-block-meta"><strong>{item["strength"]:+.2f}%</strong><br>篩出 {item["count"]} 檔</span>'
+            f'<span class="theme-block-meta"><strong>{item["strength"]:+.2f}%</strong><br>市場 {item["count"]} 檔</span>'
             '</a>'
         )
     st.markdown(
@@ -389,7 +382,7 @@ if 'selected' not in st.session_state:
 filter_col1, filter_col2 = st.columns(2)
 
 with filter_col1:
-    type_options = {'全部': None, '漲後整理（型態A）': 'A', '多頭排列（型態B）': 'B', '回撤反彈（例外C）': 'C'}
+    type_options = {'全部': None, '漲後整理（型態A）': 'A', '多頭排列（型態B）': 'B', '回撤反彈（型態C）': 'C'}
     query_type = get_query_value('type')
     type_values = list(type_options.values())
     type_labels = list(type_options.keys())
@@ -413,7 +406,7 @@ if selected_sector != '全部產業':
     filtered = {k: v for k, v in filtered.items() if v.get('sector') == selected_sector}
 
 base_filtered = filtered
-strong_themes, weak_themes = build_theme_blocks(base_filtered.keys())
+strong_themes, weak_themes = build_theme_blocks()
 if strong_themes or weak_themes:
     strong_col, weak_col = st.columns(2)
     with strong_col:
