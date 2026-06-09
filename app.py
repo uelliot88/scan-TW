@@ -733,9 +733,16 @@ for i, sym in enumerate(page_symbols):
         fig.add_trace(go.Bar(x=plot_df['date'], y=plot_df['volume'],
                              marker_color=v_colors, name='量'), row=2, col=1)
 
+        current_date_label = str(plot_df['date'].iloc[-1]) if not plot_df.empty else ''
+        date_tick_values = [str(value) for value in plot_df['date'].tolist()]
+        tick_step = max(1, len(date_tick_values) // 6)
+        bottom_date_ticks = date_tick_values[::tick_step]
+        if current_date_label and current_date_label not in bottom_date_ticks:
+            bottom_date_ticks.append(current_date_label)
+
         fig.update_layout(
             height=350,
-            margin=dict(l=5, r=40, t=8, b=20),
+            margin=dict(l=5, r=40, t=8, b=28),
             xaxis_rangeslider_visible=False,
             template="plotly_white",
             paper_bgcolor='white',
@@ -748,7 +755,8 @@ for i, sym in enumerate(page_symbols):
 
         fig.update_xaxes(type='category', nticks=10, showgrid=False, zeroline=False,
                          fixedrange=True, tickfont=dict(color='black', size=12), row=1, col=1)
-        fig.update_xaxes(type='category', nticks=10, showgrid=False, zeroline=False,
+        fig.update_xaxes(type='category', tickmode='array', tickvals=bottom_date_ticks,
+                         ticktext=bottom_date_ticks, showgrid=False, zeroline=False,
                          fixedrange=True, tickfont=dict(color='black', size=11), row=2, col=1)
         fig.update_yaxes(showgrid=False, zeroline=False, fixedrange=True,
                          tickfont=dict(color='black', size=12), side='right', row=1, col=1)
