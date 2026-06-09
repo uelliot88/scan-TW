@@ -1,8 +1,8 @@
 {
   "source": "local_market_theme_cache",
   "markets": "tse,otc",
-  "latest_trade_date": "2026-06-08",
-  "generated_at": "2026-06-08 21:06:55",
+  "latest_trade_date": "2026-06-09",
+  "generated_at": "2026-06-09 20:08:25",
   "theme_count": 148,
   "listed_stock_count": 1980,
   "enriched_stock_count": 1258,
@@ -12,7 +12,7 @@
     {
       "slug": "cpu-agentic-ai",
       "name": "CPU 與 Agentic AI",
-      "strength": -4.04,
+      "strength": 2.96,
       "stock_ids": [
         "2308",
         "2317",
@@ -32,7 +32,7 @@
     {
       "slug": "chiplet設計-平台",
       "name": "Chiplet設計/平台",
-      "strength": -4.35,
+      "strength": 4.42,
       "stock_ids": [
         "2330",
         "2454",
@@ -42,197 +42,9 @@
       "market_count": 4
     },
     {
-      "slug": "hbm",
-      "name": "HBM 高頻寬記憶體",
-      "strength": -3.83,
-      "stock_ids": [
-        "2330",
-        "2449",
-        "3443",
-        "3583",
-        "3653",
-        "3661",
-        "3711",
-        "6187",
-        "6223",
-        "6239",
-        "6510",
-        "6515",
-        "6531",
-        "6770",
-        "8112"
-      ],
-      "market_count": 15
-    },
-    {
-      "slug": "cowos-advanced-packaging",
-      "name": "AI 先進封裝",
-      "strength": -4.06,
-      "stock_ids": [
-        "1717",
-        "2330",
-        "3037",
-        "3189",
-        "3443",
-        "3661",
-        "3680",
-        "3711",
-        "6239"
-      ],
-      "market_count": 9
-    },
-    {
-      "slug": "cowos-chip-on-wafer-on-substrate",
-      "name": "CoWoS (Chip on Wafer on Substrate)",
-      "strength": -3.23,
-      "stock_ids": [
-        "2330",
-        "3037",
-        "3044",
-        "3189",
-        "3711",
-        "8046"
-      ],
-      "market_count": 6
-    },
-    {
-      "slug": "silicon-photonics",
-      "name": "矽光子與 CPO",
-      "strength": -6.34,
-      "stock_ids": [
-        "2330",
-        "2426",
-        "2489",
-        "3081",
-        "3163",
-        "3289",
-        "3363",
-        "3443",
-        "3450",
-        "3711",
-        "4977",
-        "4979",
-        "6223",
-        "6442",
-        "6451",
-        "6515",
-        "6789"
-      ],
-      "market_count": 17
-    },
-    {
-      "slug": "wafer-foundry",
-      "name": "晶圓代工",
-      "strength": -6.86,
-      "stock_ids": [
-        "2303",
-        "2330",
-        "2426",
-        "3707",
-        "5347",
-        "6770"
-      ],
-      "market_count": 6
-    },
-    {
-      "slug": "晶圓代工-foundry",
-      "name": "晶圓代工 Foundry",
-      "strength": -5.93,
-      "stock_ids": [
-        "2303",
-        "2330",
-        "5347",
-        "6770",
-        "8016"
-      ],
-      "market_count": 5
-    },
-    {
-      "slug": "cowos-l-local-si-interconnect",
-      "name": "CoWoS-L (Local Si Interconnect)",
-      "strength": -3.35,
-      "stock_ids": [
-        "2330",
-        "3037",
-        "3711",
-        "8046"
-      ],
-      "market_count": 4
-    },
-    {
-      "slug": "矽中介層-silicon-interposer",
-      "name": "矽中介層 Silicon Interposer",
-      "strength": -6.82,
-      "stock_ids": [
-        "2303",
-        "2330",
-        "6770"
-      ],
-      "market_count": 3
-    },
-    {
-      "slug": "量子運算概念",
-      "name": "量子運算概念",
-      "strength": -4.12,
-      "stock_ids": [
-        "2317",
-        "2330"
-      ],
-      "market_count": 2
-    },
-    {
-      "slug": "glass-core-substrate",
-      "name": "玻璃基板",
-      "strength": -5.34,
-      "stock_ids": [
-        "1802",
-        "2330",
-        "2467",
-        "3037",
-        "3615",
-        "3680",
-        "5234",
-        "6405",
-        "8027"
-      ],
-      "market_count": 9
-    },
-    {
-      "slug": "ucie-連接標準",
-      "name": "UCIe / 連接標準",
-      "strength": -6.42,
-      "stock_ids": [
-        "2330",
-        "3711",
-        "6643"
-      ],
-      "market_count": 3
-    },
-    {
-      "slug": "soic-system-on-integrated-chip",
-      "name": "SoIC (System on Integrated Chip)",
-      "strength": -4.69,
-      "stock_ids": [
-        "2330",
-        "3711"
-      ],
-      "market_count": 2
-    },
-    {
-      "slug": "超大規模雲端asic",
-      "name": "超大規模雲端ASIC",
-      "strength": -1.88,
-      "stock_ids": [
-        "2330",
-        "3443",
-        "3661"
-      ],
-      "market_count": 3
-    },
-    {
       "slug": "leo-satellite",
       "name": "低軌衛星",
-      "strength": -4.82,
+      "strength": 4.91,
       "stock_ids": [
         "2313",
         "2314",
@@ -263,39 +75,176 @@
       "market_count": 25
     },
     {
-      "slug": "矽光子-silicon-photonics",
-      "name": "矽光子 Silicon Photonics",
-      "strength": -5.56,
+      "slug": "hbm",
+      "name": "HBM 高頻寬記憶體",
+      "strength": 3.52,
       "stock_ids": [
         "2330",
+        "2449",
+        "3443",
+        "3583",
+        "3653",
+        "3661",
+        "3711",
+        "6187",
+        "6223",
+        "6239",
+        "6510",
+        "6515",
+        "6531",
+        "6770",
+        "8112"
+      ],
+      "market_count": 15
+    },
+    {
+      "slug": "wafer-foundry",
+      "name": "晶圓代工",
+      "strength": 5.21,
+      "stock_ids": [
+        "2303",
+        "2330",
+        "2426",
+        "3707",
+        "5347",
+        "6770"
+      ],
+      "market_count": 6
+    },
+    {
+      "slug": "晶圓代工-foundry",
+      "name": "晶圓代工 Foundry",
+      "strength": 3.66,
+      "stock_ids": [
+        "2303",
+        "2330",
+        "5347",
+        "6770",
+        "8016"
+      ],
+      "market_count": 5
+    },
+    {
+      "slug": "cowos-chip-on-wafer-on-substrate",
+      "name": "CoWoS (Chip on Wafer on Substrate)",
+      "strength": 4.84,
+      "stock_ids": [
+        "2330",
+        "3037",
+        "3044",
+        "3189",
+        "3711",
+        "8046"
+      ],
+      "market_count": 6
+    },
+    {
+      "slug": "silicon-photonics",
+      "name": "矽光子與 CPO",
+      "strength": 3.79,
+      "stock_ids": [
+        "2330",
+        "2426",
+        "2489",
         "3081",
-        "3545"
+        "3163",
+        "3289",
+        "3363",
+        "3443",
+        "3450",
+        "3711",
+        "4977",
+        "4979",
+        "6223",
+        "6442",
+        "6451",
+        "6515",
+        "6789"
+      ],
+      "market_count": 17
+    },
+    {
+      "slug": "cowos-advanced-packaging",
+      "name": "AI 先進封裝",
+      "strength": 2.95,
+      "stock_ids": [
+        "1717",
+        "2330",
+        "3037",
+        "3189",
+        "3443",
+        "3661",
+        "3680",
+        "3711",
+        "6239"
+      ],
+      "market_count": 9
+    },
+    {
+      "slug": "矽中介層-silicon-interposer",
+      "name": "矽中介層 Silicon Interposer",
+      "strength": 3.91,
+      "stock_ids": [
+        "2303",
+        "2330",
+        "6770"
       ],
       "market_count": 3
     },
     {
-      "slug": "ai-server-odm",
-      "name": "AI 伺服器組裝",
-      "strength": -5.21,
+      "slug": "cowos-l-local-si-interconnect",
+      "name": "CoWoS-L (Local Si Interconnect)",
+      "strength": 5.54,
+      "stock_ids": [
+        "2330",
+        "3037",
+        "3711",
+        "8046"
+      ],
+      "market_count": 4
+    },
+    {
+      "slug": "glass-core-substrate",
+      "name": "玻璃基板",
+      "strength": 0.74,
+      "stock_ids": [
+        "1802",
+        "2330",
+        "2467",
+        "3037",
+        "3615",
+        "3680",
+        "5234",
+        "6405",
+        "8027"
+      ],
+      "market_count": 9
+    },
+    {
+      "slug": "量子運算概念",
+      "name": "量子運算概念",
+      "strength": 1.7,
       "stock_ids": [
         "2317",
-        "2331",
-        "2356",
-        "2357",
-        "2376",
-        "2377",
-        "2382",
-        "3231",
-        "3443",
-        "3661",
-        "6669"
+        "2330"
       ],
-      "market_count": 11
+      "market_count": 2
+    },
+    {
+      "slug": "車用ai-soc-mcu",
+      "name": "車用AI SoC / MCU",
+      "strength": 6.65,
+      "stock_ids": [
+        "2308",
+        "2436",
+        "2454"
+      ],
+      "market_count": 3
     },
     {
       "slug": "gpu-ai加速晶片",
       "name": "GPU / AI加速晶片",
-      "strength": -4.59,
+      "strength": 4.04,
       "stock_ids": [
         "2382",
         "2388",
@@ -307,9 +256,41 @@
       "market_count": 6
     },
     {
+      "slug": "超大規模雲端asic",
+      "name": "超大規模雲端ASIC",
+      "strength": 1.22,
+      "stock_ids": [
+        "2330",
+        "3443",
+        "3661"
+      ],
+      "market_count": 3
+    },
+    {
+      "slug": "ucie-連接標準",
+      "name": "UCIe / 連接標準",
+      "strength": 1.6,
+      "stock_ids": [
+        "2330",
+        "3711",
+        "6643"
+      ],
+      "market_count": 3
+    },
+    {
+      "slug": "soic-system-on-integrated-chip",
+      "name": "SoIC (System on Integrated Chip)",
+      "strength": 2.9,
+      "stock_ids": [
+        "2330",
+        "3711"
+      ],
+      "market_count": 2
+    },
+    {
       "slug": "hpc-network-ic",
       "name": "HPC 與網通 IC",
-      "strength": -5.39,
+      "strength": 3.49,
       "stock_ids": [
         "2379",
         "2454",
@@ -328,20 +309,20 @@
       "market_count": 13
     },
     {
-      "slug": "車用ai-soc-mcu",
-      "name": "車用AI SoC / MCU",
-      "strength": -5.1,
+      "slug": "矽光子-silicon-photonics",
+      "name": "矽光子 Silicon Photonics",
+      "strength": 1.63,
       "stock_ids": [
-        "2308",
-        "2436",
-        "2454"
+        "2330",
+        "3081",
+        "3545"
       ],
       "market_count": 3
     },
     {
       "slug": "網路asic",
       "name": "網路ASIC",
-      "strength": -4.95,
+      "strength": 3.42,
       "stock_ids": [
         "2382",
         "2454",
@@ -352,7 +333,7 @@
     {
       "slug": "edge-ai-soc",
       "name": "Edge AI SoC",
-      "strength": -6.31,
+      "strength": 6.19,
       "stock_ids": [
         "2382",
         "2454",
@@ -361,23 +342,28 @@
       "market_count": 3
     },
     {
-      "slug": "niche-memory",
-      "name": "NOR Flash/利基記憶體",
-      "strength": -5.72,
+      "slug": "ai-server-odm",
+      "name": "AI 伺服器組裝",
+      "strength": 2.03,
       "stock_ids": [
-        "2337",
-        "2344",
-        "2408",
-        "3006",
-        "5351",
-        "6770"
+        "2317",
+        "2331",
+        "2356",
+        "2357",
+        "2376",
+        "2377",
+        "2382",
+        "3231",
+        "3443",
+        "3661",
+        "6669"
       ],
-      "market_count": 6
+      "market_count": 11
     },
     {
       "slug": "edge-ai",
       "name": "Edge AI / AIoT",
-      "strength": -5.12,
+      "strength": 6.63,
       "stock_ids": [
         "2379",
         "2395",
@@ -395,129 +381,9 @@
       "market_count": 12
     },
     {
-      "slug": "cxl控制器ic",
-      "name": "CXL控制器IC",
-      "strength": -5.97,
-      "stock_ids": [
-        "2454",
-        "3661",
-        "6643"
-      ],
-      "market_count": 3
-    },
-    {
-      "slug": "mobile",
-      "name": "智慧型手機",
-      "strength": -2.17,
-      "stock_ids": [
-        "2313",
-        "2317",
-        "2354",
-        "2450",
-        "3008",
-        "3406",
-        "4938",
-        "4958",
-        "6153",
-        "6269"
-      ],
-      "market_count": 10
-    },
-    {
-      "slug": "cxl記憶體模組",
-      "name": "CXL記憶體模組",
-      "strength": -6.34,
-      "stock_ids": [
-        "2344",
-        "2408",
-        "2451"
-      ],
-      "market_count": 3
-    },
-    {
-      "slug": "infiniband-高速互連",
-      "name": "InfiniBand / 高速互連",
-      "strength": -5.22,
-      "stock_ids": [
-        "2317",
-        "2382",
-        "6669"
-      ],
-      "market_count": 3
-    },
-    {
-      "slug": "hbm-dram",
-      "name": "HBM / DRAM",
-      "strength": -5.87,
-      "stock_ids": [
-        "2344",
-        "2408",
-        "3006"
-      ],
-      "market_count": 3
-    },
-    {
-      "slug": "liquid_cooling_advanced",
-      "name": "液冷散熱系統",
-      "strength": -0.63,
-      "stock_ids": [
-        "2308",
-        "2421",
-        "3013",
-        "3017",
-        "3324",
-        "3338",
-        "3483",
-        "3653",
-        "6125",
-        "6230",
-        "6275",
-        "8996"
-      ],
-      "market_count": 12
-    },
-    {
-      "slug": "ic-substrate",
-      "name": "IC 載板",
-      "strength": -3.8,
-      "stock_ids": [
-        "1721",
-        "2383",
-        "3037",
-        "3189",
-        "4722",
-        "4958",
-        "6213",
-        "6271",
-        "8046",
-        "8358"
-      ],
-      "market_count": 10
-    },
-    {
-      "slug": "pc-nb-tablet",
-      "name": "PC 與筆記型電腦",
-      "strength": -6.02,
-      "stock_ids": [
-        "2324",
-        "2352",
-        "2353",
-        "2356",
-        "2357",
-        "2377",
-        "2382",
-        "2489",
-        "3005",
-        "3231",
-        "4938",
-        "6456"
-      ],
-      "market_count": 12
-    },
-    {
       "slug": "ddic",
       "name": "顯示驅動 IC",
-      "strength": -6.55,
+      "strength": 4.84,
       "stock_ids": [
         "2303",
         "2458",
@@ -536,33 +402,112 @@
       "market_count": 13
     },
     {
-      "slug": "battery-cell-module",
-      "name": "電芯製造與電池模組",
-      "strength": -2.86,
+      "slug": "niche-memory",
+      "name": "NOR Flash/利基記憶體",
+      "strength": 4.22,
       "stock_ids": [
-        "1101",
-        "1301",
-        "2206",
-        "2317",
-        "3211",
-        "3323",
-        "3665",
-        "4931",
-        "5243",
-        "5309",
-        "6121",
-        "6558",
-        "6781",
-        "8038",
-        "8163",
-        "8171"
+        "2337",
+        "2344",
+        "2408",
+        "3006",
+        "5351",
+        "6770"
       ],
-      "market_count": 16
+      "market_count": 6
+    },
+    {
+      "slug": "cxl控制器ic",
+      "name": "CXL控制器IC",
+      "strength": 3.62,
+      "stock_ids": [
+        "2454",
+        "3661",
+        "6643"
+      ],
+      "market_count": 3
+    },
+    {
+      "slug": "liquid_cooling_advanced",
+      "name": "液冷散熱系統",
+      "strength": 1.45,
+      "stock_ids": [
+        "2308",
+        "2421",
+        "3013",
+        "3017",
+        "3324",
+        "3338",
+        "3483",
+        "3653",
+        "6125",
+        "6230",
+        "6275",
+        "8996"
+      ],
+      "market_count": 12
+    },
+    {
+      "slug": "hbm-dram",
+      "name": "HBM / DRAM",
+      "strength": 4.06,
+      "stock_ids": [
+        "2344",
+        "2408",
+        "3006"
+      ],
+      "market_count": 3
+    },
+    {
+      "slug": "cxl記憶體模組",
+      "name": "CXL記憶體模組",
+      "strength": 4.15,
+      "stock_ids": [
+        "2344",
+        "2408",
+        "2451"
+      ],
+      "market_count": 3
+    },
+    {
+      "slug": "ic-substrate",
+      "name": "IC 載板",
+      "strength": 4.9,
+      "stock_ids": [
+        "1721",
+        "2383",
+        "3037",
+        "3189",
+        "4722",
+        "4958",
+        "6213",
+        "6271",
+        "8046",
+        "8358"
+      ],
+      "market_count": 10
+    },
+    {
+      "slug": "mobile",
+      "name": "智慧型手機",
+      "strength": 5.69,
+      "stock_ids": [
+        "2313",
+        "2317",
+        "2354",
+        "2450",
+        "3008",
+        "3406",
+        "4938",
+        "4958",
+        "6153",
+        "6269"
+      ],
+      "market_count": 10
     },
     {
       "slug": "bbu",
       "name": "BBU 電池備援",
-      "strength": -2.15,
+      "strength": 4.61,
       "stock_ids": [
         "2301",
         "2308",
@@ -575,28 +520,9 @@
       "market_count": 7
     },
     {
-      "slug": "memory-modules",
-      "name": "記憶體模組",
-      "strength": -5.04,
-      "stock_ids": [
-        "2451",
-        "3135",
-        "3260",
-        "4967",
-        "4973",
-        "5289",
-        "6278",
-        "8088",
-        "8271",
-        "8277",
-        "8299"
-      ],
-      "market_count": 11
-    },
-    {
       "slug": "psu",
       "name": "電源供應器",
-      "strength": -5.66,
+      "strength": 2.37,
       "stock_ids": [
         "2301",
         "2308",
@@ -620,25 +546,78 @@
       "market_count": 18
     },
     {
-      "slug": "mcu",
-      "name": "MCU 嵌入式 IC",
-      "strength": -6.84,
+      "slug": "pcb-manufacturing",
+      "name": "PCB 硬板製造",
+      "strength": 5.52,
       "stock_ids": [
-        "2303",
-        "2379",
-        "2401",
-        "3014",
-        "4919",
-        "5347",
-        "5471",
-        "6202"
+        "2313",
+        "2316",
+        "2355",
+        "2367",
+        "2368",
+        "3044",
+        "3167",
+        "3229",
+        "3715",
+        "4927",
+        "4958",
+        "5469",
+        "6108",
+        "6141",
+        "6191",
+        "6509",
+        "8021",
+        "8074",
+        "8213",
+        "8438"
       ],
-      "market_count": 8
+      "market_count": 20
+    },
+    {
+      "slug": "passive-resistor",
+      "name": "電阻與被動保護",
+      "strength": 7.88,
+      "stock_ids": [
+        "2327",
+        "2375",
+        "2428",
+        "2478",
+        "2492",
+        "3624",
+        "3663",
+        "4760",
+        "6127",
+        "6204",
+        "6224",
+        "6642",
+        "6834"
+      ],
+      "market_count": 13
+    },
+    {
+      "slug": "pc-nb-tablet",
+      "name": "PC 與筆記型電腦",
+      "strength": 1.43,
+      "stock_ids": [
+        "2324",
+        "2352",
+        "2353",
+        "2356",
+        "2357",
+        "2377",
+        "2382",
+        "2489",
+        "3005",
+        "3231",
+        "4938",
+        "6456"
+      ],
+      "market_count": 12
     },
     {
       "slug": "banking-finance",
       "name": "銀行金融",
-      "strength": -2.51,
+      "strength": 4.82,
       "stock_ids": [
         "2801",
         "2812",
@@ -668,33 +647,69 @@
       "market_count": 24
     },
     {
-      "slug": "ess-storage",
-      "name": "儲能系統整合",
-      "strength": -5.11,
+      "slug": "mcu",
+      "name": "MCU 嵌入式 IC",
+      "strength": 4.45,
       "stock_ids": [
-        "1101",
-        "1503",
-        "1504",
-        "1513",
-        "1514",
-        "1519",
-        "2308",
-        "2371",
-        "3027",
-        "3058",
-        "3576",
-        "6441",
-        "6869",
-        "6873",
-        "8038",
-        "8171"
+        "2303",
+        "2379",
+        "2401",
+        "3014",
+        "4919",
+        "5347",
+        "5471",
+        "6202"
       ],
-      "market_count": 16
+      "market_count": 8
+    },
+    {
+      "slug": "passive-inductor",
+      "name": "功率電感",
+      "strength": 4.95,
+      "stock_ids": [
+        "2327",
+        "2492",
+        "3207",
+        "3236",
+        "3357",
+        "4760",
+        "5228",
+        "6155",
+        "6156",
+        "6284",
+        "6292",
+        "6432",
+        "6862",
+        "8121"
+      ],
+      "market_count": 14
+    },
+    {
+      "slug": "mlcc-capacitor",
+      "name": "電容器",
+      "strength": 7.61,
+      "stock_ids": [
+        "2327",
+        "2375",
+        "2472",
+        "2492",
+        "3026",
+        "3090",
+        "3537",
+        "4760",
+        "5328",
+        "6173",
+        "6175",
+        "6449",
+        "8042",
+        "8043"
+      ],
+      "market_count": 14
     },
     {
       "slug": "industrial-automation",
       "name": "工業自動化",
-      "strength": -5.69,
+      "strength": 3.27,
       "stock_ids": [
         "1503",
         "1504",
@@ -718,9 +733,87 @@
       "market_count": 18
     },
     {
+      "slug": "battery-cell-module",
+      "name": "電芯製造與電池模組",
+      "strength": 2.63,
+      "stock_ids": [
+        "1101",
+        "1301",
+        "2206",
+        "2317",
+        "3211",
+        "3323",
+        "3665",
+        "4931",
+        "5243",
+        "5309",
+        "6121",
+        "6558",
+        "6781",
+        "8038",
+        "8163",
+        "8171"
+      ],
+      "market_count": 16
+    },
+    {
+      "slug": "ess-storage",
+      "name": "儲能系統整合",
+      "strength": 2.27,
+      "stock_ids": [
+        "1101",
+        "1503",
+        "1504",
+        "1513",
+        "1514",
+        "1519",
+        "2308",
+        "2371",
+        "3027",
+        "3058",
+        "3576",
+        "6441",
+        "6869",
+        "6873",
+        "8038",
+        "8171"
+      ],
+      "market_count": 16
+    },
+    {
+      "slug": "infiniband-高速互連",
+      "name": "InfiniBand / 高速互連",
+      "strength": 1.01,
+      "stock_ids": [
+        "2317",
+        "2382",
+        "6669"
+      ],
+      "market_count": 3
+    },
+    {
+      "slug": "memory-modules",
+      "name": "記憶體模組",
+      "strength": 4.47,
+      "stock_ids": [
+        "2451",
+        "3135",
+        "3260",
+        "4967",
+        "4973",
+        "5289",
+        "6278",
+        "8088",
+        "8271",
+        "8277",
+        "8299"
+      ],
+      "market_count": 11
+    },
+    {
       "slug": "abf載板-gpu-hpc用",
       "name": "ABF載板 (GPU/HPC用)",
-      "strength": -2.5,
+      "strength": 5.81,
       "stock_ids": [
         "3037",
         "3044",
@@ -732,7 +825,7 @@
     {
       "slug": "先進基板-abf-substrate",
       "name": "先進基板 ABF Substrate",
-      "strength": -2.5,
+      "strength": 5.81,
       "stock_ids": [
         "3037",
         "3044",
@@ -742,81 +835,9 @@
       "market_count": 4
     },
     {
-      "slug": "gpu機板-加速卡載板",
-      "name": "GPU機板 / 加速卡載板",
-      "strength": -1.99,
-      "stock_ids": [
-        "3037",
-        "3189",
-        "8046"
-      ],
-      "market_count": 3
-    },
-    {
-      "slug": "vrm-電壓調節模組",
-      "name": "VRM / 電壓調節模組",
-      "strength": -4.5,
-      "stock_ids": [
-        "2301",
-        "2308",
-        "3317",
-        "6201"
-      ],
-      "market_count": 4
-    },
-    {
-      "slug": "車用雷達-lidar",
-      "name": "車用雷達 / LiDAR",
-      "strength": -4.23,
-      "stock_ids": [
-        "2301",
-        "2308",
-        "4968"
-      ],
-      "market_count": 3
-    },
-    {
-      "slug": "馬達-驅動器",
-      "name": "馬達 / 驅動器",
-      "strength": -5.13,
-      "stock_ids": [
-        "1503",
-        "1504",
-        "2308"
-      ],
-      "market_count": 3
-    },
-    {
-      "slug": "電源供應-psu",
-      "name": "電源供應 PSU",
-      "strength": -3.54,
-      "stock_ids": [
-        "2301",
-        "2308",
-        "6201",
-        "6208"
-      ],
-      "market_count": 4
-    },
-    {
-      "slug": "cxl-technology",
-      "name": "CXL 技術",
-      "strength": -2.91,
-      "stock_ids": [
-        "2345",
-        "3443",
-        "3661",
-        "4966",
-        "5269",
-        "5274",
-        "5289"
-      ],
-      "market_count": 7
-    },
-    {
       "slug": "功率半導體",
       "name": "功率半導體",
-      "strength": -7.49,
+      "strength": 3.82,
       "stock_ids": [
         "2308",
         "2481",
@@ -829,87 +850,77 @@
       "market_count": 7
     },
     {
-      "slug": "工業機器人傳動-精密軸承",
-      "name": "工業機器人傳動/精密軸承",
-      "strength": -5.04,
+      "slug": "advanced-packaging-test",
+      "name": "封測代工",
+      "strength": 5.16,
       "stock_ids": [
-        "1504",
-        "2049",
-        "2308"
-      ],
-      "market_count": 3
-    },
-    {
-      "slug": "mlcc-capacitor",
-      "name": "電容器",
-      "strength": -3.73,
-      "stock_ids": [
-        "2327",
-        "2375",
-        "2472",
-        "2492",
-        "3026",
-        "3090",
-        "3537",
-        "4760",
-        "5328",
-        "6173",
-        "6175",
-        "6449",
-        "8042",
-        "8043"
+        "2329",
+        "2369",
+        "2441",
+        "3265",
+        "3374",
+        "3711",
+        "6147",
+        "6239",
+        "6257",
+        "6271",
+        "6451",
+        "8110",
+        "8131",
+        "8150"
       ],
       "market_count": 14
     },
     {
-      "slug": "high-end-testing",
-      "name": "IC 測試服務",
-      "strength": -4.09,
+      "slug": "vrm-電壓調節模組",
+      "name": "VRM / 電壓調節模組",
+      "strength": 3.41,
       "stock_ids": [
-        "2360",
-        "2449",
-        "3030",
-        "3264",
-        "6217",
-        "6223",
-        "6510",
-        "6515",
-        "6683"
+        "2301",
+        "2308",
+        "3317",
+        "6201"
       ],
-      "market_count": 9
+      "market_count": 4
     },
     {
-      "slug": "pcb-manufacturing",
-      "name": "PCB 硬板製造",
-      "strength": -3.78,
+      "slug": "車用雷達-lidar",
+      "name": "車用雷達 / LiDAR",
+      "strength": 4.14,
       "stock_ids": [
-        "2313",
-        "2316",
-        "2355",
-        "2367",
-        "2368",
-        "3044",
-        "3167",
-        "3229",
-        "3715",
-        "4927",
-        "4958",
-        "5469",
-        "6108",
-        "6141",
-        "6191",
-        "6509",
-        "8021",
-        "8074",
-        "8213",
-        "8438"
+        "2301",
+        "2308",
+        "4968"
       ],
-      "market_count": 20
+      "market_count": 3
+    },
+    {
+      "slug": "電源供應-psu",
+      "name": "電源供應 PSU",
+      "strength": 3.51,
+      "stock_ids": [
+        "2301",
+        "2308",
+        "6201",
+        "6208"
+      ],
+      "market_count": 4
+    },
+    {
+      "slug": "gpu機板-加速卡載板",
+      "name": "GPU機板 / 加速卡載板",
+      "strength": 6.22,
+      "stock_ids": [
+        "3037",
+        "3189",
+        "8046"
+      ],
+      "market_count": 3
     },
     {
       "slug": "fiberglass-cloth",
       "name": "玻纖布",
-      "strength": -5.64,
+      "strength": 3.02,
       "stock_ids": [
         "1303",
         "1802",
@@ -925,53 +936,46 @@
       "market_count": 10
     },
     {
-      "slug": "超算-hpc",
-      "name": "超算 / HPC",
-      "strength": -6.76,
+      "slug": "馬達-驅動器",
+      "name": "馬達 / 驅動器",
+      "strength": 2.99,
       "stock_ids": [
-        "2356",
-        "2382",
-        "6669"
+        "1503",
+        "1504",
+        "2308"
       ],
       "market_count": 3
     },
     {
-      "slug": "車用電源-充電",
-      "name": "車用電源 / 充電",
-      "strength": -3.91,
+      "slug": "工業機器人傳動-精密軸承",
+      "name": "工業機器人傳動/精密軸承",
+      "strength": 4.63,
       "stock_ids": [
-        "2308",
-        "6201",
-        "8081"
+        "1504",
+        "2049",
+        "2308"
       ],
       "market_count": 3
     },
     {
-      "slug": "ups-不斷電",
-      "name": "UPS / 不斷電",
-      "strength": -5.04,
-      "stock_ids": [
-        "2308",
-        "5222",
-        "5299"
-      ],
-      "market_count": 3
-    },
-    {
-      "slug": "smartnic-dpu",
-      "name": "SmartNIC / DPU",
-      "strength": -4.24,
+      "slug": "cxl-technology",
+      "name": "CXL 技術",
+      "strength": 3.48,
       "stock_ids": [
         "2345",
-        "2382",
-        "6285"
+        "3443",
+        "3661",
+        "4966",
+        "5269",
+        "5274",
+        "5289"
       ],
-      "market_count": 3
+      "market_count": 7
     },
     {
       "slug": "high-speed-optics",
       "name": "高速光模組",
-      "strength": -7.04,
+      "strength": 3.15,
       "stock_ids": [
         "2345",
         "2455",
@@ -996,53 +1000,123 @@
       "market_count": 19
     },
     {
-      "slug": "advanced-packaging-test",
-      "name": "封測代工",
-      "strength": -7.98,
+      "slug": "車用電源-充電",
+      "name": "車用電源 / 充電",
+      "strength": 2.81,
       "stock_ids": [
-        "2329",
-        "2369",
-        "2441",
-        "3265",
-        "3374",
-        "3711",
-        "6147",
-        "6239",
-        "6257",
-        "6271",
-        "6451",
-        "8110",
-        "8131",
-        "8150"
+        "2308",
+        "6201",
+        "8081"
       ],
-      "market_count": 14
+      "market_count": 3
     },
     {
-      "slug": "passive-inductor",
-      "name": "功率電感",
-      "strength": -3.95,
+      "slug": "ups-不斷電",
+      "name": "UPS / 不斷電",
+      "strength": 2.82,
       "stock_ids": [
-        "2327",
-        "2492",
-        "3207",
-        "3236",
-        "3357",
-        "4760",
-        "5228",
-        "6155",
-        "6156",
-        "6284",
-        "6292",
-        "6432",
-        "6862",
-        "8121"
+        "2308",
+        "5222",
+        "5299"
       ],
-      "market_count": 14
+      "market_count": 3
+    },
+    {
+      "slug": "high-end-testing",
+      "name": "IC 測試服務",
+      "strength": 1.6,
+      "stock_ids": [
+        "2360",
+        "2449",
+        "3030",
+        "3264",
+        "6217",
+        "6223",
+        "6510",
+        "6515",
+        "6683"
+      ],
+      "market_count": 9
+    },
+    {
+      "slug": "precision-metal-casing",
+      "name": "精密機構件",
+      "strength": 2.23,
+      "stock_ids": [
+        "2059",
+        "2354",
+        "2474",
+        "2634",
+        "3013",
+        "3376",
+        "3548",
+        "3593",
+        "6117",
+        "6235",
+        "6805",
+        "8210"
+      ],
+      "market_count": 12
+    },
+    {
+      "slug": "thermal_components_air",
+      "name": "氣冷與核心組件",
+      "strength": 1.4,
+      "stock_ids": [
+        "2354",
+        "2421",
+        "2486",
+        "3017",
+        "3071",
+        "3324",
+        "3338",
+        "3653",
+        "6124",
+        "6230",
+        "6275",
+        "6591"
+      ],
+      "market_count": 12
+    },
+    {
+      "slug": "超算-hpc",
+      "name": "超算 / HPC",
+      "strength": 0.7,
+      "stock_ids": [
+        "2356",
+        "2382",
+        "6669"
+      ],
+      "market_count": 3
+    },
+    {
+      "slug": "smartnic-dpu",
+      "name": "SmartNIC / DPU",
+      "strength": 2.21,
+      "stock_ids": [
+        "2345",
+        "2382",
+        "6285"
+      ],
+      "market_count": 3
+    },
+    {
+      "slug": "液冷-冷板式水冷",
+      "name": "液冷 / 冷板式水冷",
+      "strength": 0.41,
+      "stock_ids": [
+        "3017",
+        "3324",
+        "3338",
+        "3653",
+        "6125"
+      ],
+      "market_count": 5
     },
     {
       "slug": "sic-gan-power",
       "name": "第三代半導體",
-      "strength": -7.07,
+      "strength": 5.86,
       "stock_ids": [
         "2302",
         "2340",
@@ -1065,90 +1139,48 @@
       "market_count": 17
     },
     {
-      "slug": "passive-resistor",
-      "name": "電阻與被動保護",
-      "strength": -4.22,
+      "slug": "display-panel",
+      "name": "面板產業",
+      "strength": 0.26,
       "stock_ids": [
-        "2327",
-        "2375",
-        "2428",
-        "2478",
-        "2492",
-        "3624",
-        "3663",
-        "4760",
-        "6127",
-        "6204",
-        "6224",
-        "6642",
-        "6834"
-      ],
-      "market_count": 13
-    },
-    {
-      "slug": "thermal_components_air",
-      "name": "氣冷與核心組件",
-      "strength": -2.98,
-      "stock_ids": [
-        "2354",
-        "2421",
-        "2486",
-        "3017",
-        "3071",
-        "3324",
-        "3338",
-        "3653",
-        "6124",
-        "6230",
-        "6275",
-        "6591"
+        "2409",
+        "3481",
+        "3714",
+        "4960",
+        "5234",
+        "5371",
+        "6116",
+        "6176",
+        "6278",
+        "6861",
+        "8069",
+        "8215"
       ],
       "market_count": 12
     },
     {
-      "slug": "nand-flash控制器",
-      "name": "NAND / Flash控制器",
-      "strength": -5.13,
+      "slug": "networking-equipment",
+      "name": "高速交換器與無線網路",
+      "strength": 2.79,
       "stock_ids": [
-        "2337",
-        "5351",
-        "8299"
+        "2332",
+        "2345",
+        "2379",
+        "3380",
+        "3491",
+        "3596",
+        "4906",
+        "4968",
+        "5388",
+        "6285",
+        "6526"
       ],
-      "market_count": 3
-    },
-    {
-      "slug": "網路交換晶片概念",
-      "name": "網路交換晶片概念",
-      "strength": -3.59,
-      "stock_ids": [
-        "2382"
-      ],
-      "market_count": 1
-    },
-    {
-      "slug": "precision-metal-casing",
-      "name": "精密機構件",
-      "strength": -2.21,
-      "stock_ids": [
-        "2059",
-        "2354",
-        "2474",
-        "2634",
-        "3013",
-        "3376",
-        "3548",
-        "3593",
-        "6117",
-        "6235",
-        "6805",
-        "8210"
-      ],
-      "market_count": 12
+      "market_count": 11
     },
     {
       "slug": "advanced-packaging-automation",
       "name": "封裝量測自動化",
-      "strength": -4.97,
+      "strength": 1.44,
       "stock_ids": [
         "2360",
         "3030",
@@ -1169,22 +1201,304 @@
       "market_count": 15
     },
     {
-      "slug": "液冷-冷板式水冷",
-      "name": "液冷 / 冷板式水冷",
-      "strength": -0.25,
+      "slug": "microled-display",
+      "name": "MicroLED 顯示供應鏈",
+      "strength": 2.42,
+      "stock_ids": [
+        "2393",
+        "2409",
+        "2426",
+        "3481",
+        "3714",
+        "8064"
+      ],
+      "market_count": 6
+    },
+    {
+      "slug": "ems-smt",
+      "name": "EMS 電子代工",
+      "strength": 2.67,
+      "stock_ids": [
+        "2301",
+        "2314",
+        "2329",
+        "2356",
+        "3596",
+        "6266",
+        "6278",
+        "6285"
+      ],
+      "market_count": 8
+    },
+    {
+      "slug": "ai-server-chassis-rails",
+      "name": "機殼與滑軌",
+      "strength": 2.09,
+      "stock_ids": [
+        "2059",
+        "3013",
+        "3325",
+        "3483",
+        "3593",
+        "3693",
+        "5243",
+        "5284",
+        "5465",
+        "6117",
+        "6125",
+        "6584",
+        "8210"
+      ],
+      "market_count": 13
+    },
+    {
+      "slug": "機殼-機架",
+      "name": "機殼 / 機架",
+      "strength": 6.63,
+      "stock_ids": [
+        "2059",
+        "3363",
+        "8210"
+      ],
+      "market_count": 3
+    },
+    {
+      "slug": "quartz-components",
+      "name": "石英頻率控制",
+      "strength": 9.11,
+      "stock_ids": [
+        "2484",
+        "3042",
+        "3221",
+        "6174",
+        "8182",
+        "8289"
+      ],
+      "market_count": 6
+    },
+    {
+      "slug": "fan-out封裝-fowlp",
+      "name": "Fan-Out封裝 / FOWLP",
+      "strength": 6.41,
+      "stock_ids": [
+        "3711",
+        "6239",
+        "8150"
+      ],
+      "market_count": 3
+    },
+    {
+      "slug": "advanced-packaging-process",
+      "name": "封裝製程機台",
+      "strength": 0.68,
+      "stock_ids": [
+        "2467",
+        "2493",
+        "3131",
+        "3580",
+        "3583",
+        "5443",
+        "6187",
+        "6207",
+        "6425",
+        "6640",
+        "6664",
+        "6937",
+        "7751",
+        "8027",
+        "8064"
+      ],
+      "market_count": 15
+    },
+    {
+      "slug": "網路交換晶片概念",
+      "name": "網路交換晶片概念",
+      "strength": -0.4,
+      "stock_ids": [
+        "2382"
+      ],
+      "market_count": 1
+    },
+    {
+      "slug": "packaging-materials",
+      "name": "導線架與化學品",
+      "strength": 0.83,
+      "stock_ids": [
+        "1711",
+        "1717",
+        "1773",
+        "2351",
+        "2486",
+        "3305",
+        "3444",
+        "3653",
+        "4720",
+        "4755",
+        "4764",
+        "5285",
+        "6548",
+        "8070"
+      ],
+      "market_count": 14
+    },
+    {
+      "slug": "nand-flash控制器",
+      "name": "NAND / Flash控制器",
+      "strength": 4.05,
+      "stock_ids": [
+        "2337",
+        "5351",
+        "8299"
+      ],
+      "market_count": 3
+    },
+    {
+      "slug": "asic-ip-design",
+      "name": "客製 ASIC 與矽智財",
+      "strength": 1.83,
+      "stock_ids": [
+        "3035",
+        "3443",
+        "3529",
+        "3661",
+        "6423",
+        "6462",
+        "6533",
+        "6643",
+        "6695",
+        "8227"
+      ],
+      "market_count": 10
+    },
+    {
+      "slug": "傳統封測",
+      "name": "傳統封測",
+      "strength": 2.48,
+      "stock_ids": [
+        "2360",
+        "2449",
+        "3527",
+        "5351"
+      ],
+      "market_count": 4
+    },
+    {
+      "slug": "高速-高頻pcb",
+      "name": "高速/高頻PCB",
+      "strength": 5.27,
+      "stock_ids": [
+        "2367",
+        "2383",
+        "6213",
+        "8213"
+      ],
+      "market_count": 4
+    },
+    {
+      "slug": "氣冷-散熱片-熱管",
+      "name": "氣冷 / 散熱片/熱管",
+      "strength": 0.94,
       "stock_ids": [
         "3017",
-        "3324",
-        "3338",
-        "3653",
-        "6125"
+        "3483",
+        "3708",
+        "6230"
       ],
-      "market_count": 5
+      "market_count": 4
+    },
+    {
+      "slug": "ic-distribution",
+      "name": "IC 通路",
+      "strength": 4.3,
+      "stock_ids": [
+        "2347",
+        "3028",
+        "3033",
+        "3036",
+        "3048",
+        "3209",
+        "3312",
+        "3360",
+        "3528",
+        "3702",
+        "6189",
+        "6227",
+        "6265",
+        "6270",
+        "6474",
+        "8032",
+        "8096",
+        "8112"
+      ],
+      "market_count": 18
+    },
+    {
+      "slug": "connector-highspeed",
+      "name": "AI 互連元件",
+      "strength": 1.8,
+      "stock_ids": [
+        "2392",
+        "2460",
+        "3023",
+        "3217",
+        "3322",
+        "3526",
+        "3533",
+        "3605",
+        "3665",
+        "6190",
+        "6197",
+        "6205",
+        "6290",
+        "6715",
+        "6913",
+        "8103",
+        "8147"
+      ],
+      "market_count": 17
+    },
+    {
+      "slug": "矽智財-ip-eda",
+      "name": "矽智財 IP / EDA",
+      "strength": 0.2,
+      "stock_ids": [
+        "3443",
+        "3529",
+        "3661",
+        "6643"
+      ],
+      "market_count": 4
+    },
+    {
+      "slug": "銅箔基板-ccl",
+      "name": "銅箔基板 CCL",
+      "strength": 5.86,
+      "stock_ids": [
+        "2383",
+        "6213"
+      ],
+      "market_count": 2
+    },
+    {
+      "slug": "optical-lens-camera",
+      "name": "光學鏡頭",
+      "strength": 7.39,
+      "stock_ids": [
+        "3008",
+        "3019",
+        "3362",
+        "3406",
+        "3441",
+        "4915",
+        "4976",
+        "6271"
+      ],
+      "market_count": 8
     },
     {
       "slug": "electrical_equipment",
       "name": "電器電纜",
-      "strength": -4.91,
+      "strength": 1.3,
       "stock_ids": [
         "1301",
         "1305",
@@ -1209,305 +1523,9 @@
       "market_count": 19
     },
     {
-      "slug": "傳統封測",
-      "name": "傳統封測",
-      "strength": -5.38,
-      "stock_ids": [
-        "2360",
-        "2449",
-        "3527",
-        "5351"
-      ],
-      "market_count": 4
-    },
-    {
-      "slug": "networking-equipment",
-      "name": "高速交換器與無線網路",
-      "strength": -6.33,
-      "stock_ids": [
-        "2332",
-        "2345",
-        "2379",
-        "3380",
-        "3491",
-        "3596",
-        "4906",
-        "4968",
-        "5388",
-        "6285",
-        "6526"
-      ],
-      "market_count": 11
-    },
-    {
-      "slug": "企業ssd控制器",
-      "name": "企業SSD控制器",
-      "strength": -8.16,
-      "stock_ids": [
-        "8299"
-      ],
-      "market_count": 1
-    },
-    {
-      "slug": "fan-out封裝-fowlp",
-      "name": "Fan-Out封裝 / FOWLP",
-      "strength": -8.3,
-      "stock_ids": [
-        "3711",
-        "6239",
-        "8150"
-      ],
-      "market_count": 3
-    },
-    {
-      "slug": "asic-ip-design",
-      "name": "客製 ASIC 與矽智財",
-      "strength": -6.13,
-      "stock_ids": [
-        "3035",
-        "3443",
-        "3529",
-        "3661",
-        "6423",
-        "6462",
-        "6533",
-        "6643",
-        "6695",
-        "8227"
-      ],
-      "market_count": 10
-    },
-    {
-      "slug": "ic-distribution",
-      "name": "IC 通路",
-      "strength": -4.01,
-      "stock_ids": [
-        "2347",
-        "3028",
-        "3033",
-        "3036",
-        "3048",
-        "3209",
-        "3312",
-        "3360",
-        "3528",
-        "3702",
-        "6189",
-        "6227",
-        "6265",
-        "6270",
-        "6474",
-        "8032",
-        "8096",
-        "8112"
-      ],
-      "market_count": 18
-    },
-    {
-      "slug": "矽智財-ip-eda",
-      "name": "矽智財 IP / EDA",
-      "strength": -4.85,
-      "stock_ids": [
-        "3443",
-        "3529",
-        "3661",
-        "6643"
-      ],
-      "market_count": 4
-    },
-    {
-      "slug": "connector-highspeed",
-      "name": "AI 互連元件",
-      "strength": -3.86,
-      "stock_ids": [
-        "2392",
-        "2460",
-        "3023",
-        "3217",
-        "3322",
-        "3526",
-        "3533",
-        "3605",
-        "3665",
-        "6190",
-        "6197",
-        "6205",
-        "6290",
-        "6715",
-        "6913",
-        "8103",
-        "8147"
-      ],
-      "market_count": 17
-    },
-    {
-      "slug": "packaging-materials",
-      "name": "導線架與化學品",
-      "strength": -5.31,
-      "stock_ids": [
-        "1711",
-        "1717",
-        "1773",
-        "2351",
-        "2486",
-        "3305",
-        "3444",
-        "3653",
-        "4720",
-        "4755",
-        "4764",
-        "5285",
-        "6548",
-        "8070"
-      ],
-      "market_count": 14
-    },
-    {
-      "slug": "offshore-wind",
-      "name": "離岸風電",
-      "strength": -4.15,
-      "stock_ids": [
-        "1503",
-        "1504",
-        "1513",
-        "1589",
-        "1605",
-        "2002",
-        "2013",
-        "2031",
-        "2072",
-        "2208",
-        "2606",
-        "3708",
-        "6753",
-        "6806",
-        "6869",
-        "6994",
-        "7786",
-        "9933",
-        "9958"
-      ],
-      "market_count": 19
-    },
-    {
-      "slug": "高速-高頻pcb",
-      "name": "高速/高頻PCB",
-      "strength": -4.28,
-      "stock_ids": [
-        "2367",
-        "2383",
-        "6213",
-        "8213"
-      ],
-      "market_count": 4
-    },
-    {
-      "slug": "ai推論加速卡",
-      "name": "AI推論加速卡",
-      "strength": -6.48,
-      "stock_ids": [
-        "2357",
-        "2376",
-        "2377"
-      ],
-      "market_count": 3
-    },
-    {
-      "slug": "optical-lens-camera",
-      "name": "光學鏡頭",
-      "strength": -4.94,
-      "stock_ids": [
-        "3008",
-        "3019",
-        "3362",
-        "3406",
-        "3441",
-        "4915",
-        "4976",
-        "6271"
-      ],
-      "market_count": 8
-    },
-    {
-      "slug": "資料中心建置-si",
-      "name": "資料中心建置 SI",
-      "strength": -5.08,
-      "stock_ids": [
-        "2353",
-        "3231",
-        "6214"
-      ],
-      "market_count": 3
-    },
-    {
-      "slug": "銅箔基板-ccl",
-      "name": "銅箔基板 CCL",
-      "strength": -3.34,
-      "stock_ids": [
-        "2383",
-        "6213"
-      ],
-      "market_count": 2
-    },
-    {
-      "slug": "display-panel",
-      "name": "面板產業",
-      "strength": -6.53,
-      "stock_ids": [
-        "2409",
-        "3481",
-        "3714",
-        "4960",
-        "5234",
-        "5371",
-        "6116",
-        "6176",
-        "6278",
-        "6861",
-        "8069",
-        "8215"
-      ],
-      "market_count": 12
-    },
-    {
-      "slug": "ai-asic-soc設計",
-      "name": "AI ASIC / SoC設計",
-      "strength": -4.19,
-      "stock_ids": [
-        "3443",
-        "3661",
-        "6643"
-      ],
-      "market_count": 3
-    },
-    {
-      "slug": "epc_engineering",
-      "name": "設備與廠務工程",
-      "strength": -3.23,
-      "stock_ids": [
-        "2404",
-        "2535",
-        "2546",
-        "2597",
-        "3402",
-        "5292",
-        "5536",
-        "6122",
-        "6139",
-        "6196",
-        "6613",
-        "6667",
-        "6691",
-        "6903",
-        "7703",
-        "9933"
-      ],
-      "market_count": 16
-    },
-    {
       "slug": "petrochem-plastics",
       "name": "石化與塑膠產業",
-      "strength": -4.24,
+      "strength": -0.24,
       "stock_ids": [
         "1301",
         "1303",
@@ -1532,60 +1550,9 @@
       "market_count": 19
     },
     {
-      "slug": "optical-sensors",
-      "name": "光感測與元件",
-      "strength": -5.96,
-      "stock_ids": [
-        "2340",
-        "2393",
-        "2455",
-        "3059",
-        "3081",
-        "3227",
-        "3374",
-        "3714",
-        "6271",
-        "6462",
-        "6732",
-        "6742",
-        "6789",
-        "7772",
-        "8249"
-      ],
-      "market_count": 15
-    },
-    {
-      "slug": "ems-smt",
-      "name": "EMS 電子代工",
-      "strength": -5.17,
-      "stock_ids": [
-        "2301",
-        "2314",
-        "2329",
-        "2356",
-        "3596",
-        "6266",
-        "6278",
-        "6285"
-      ],
-      "market_count": 8
-    },
-    {
-      "slug": "氣冷-散熱片-熱管",
-      "name": "氣冷 / 散熱片/熱管",
-      "strength": -2.02,
-      "stock_ids": [
-        "3017",
-        "3483",
-        "3708",
-        "6230"
-      ],
-      "market_count": 4
-    },
-    {
       "slug": "analog-power-ic",
       "name": "類比與功率 IC",
-      "strength": -7.42,
+      "strength": 3.2,
       "stock_ids": [
         "2436",
         "3014",
@@ -1609,117 +1576,55 @@
       "market_count": 18
     },
     {
-      "slug": "advanced-packaging-process",
-      "name": "封裝製程機台",
-      "strength": -5.74,
+      "slug": "ai-asic-soc設計",
+      "name": "AI ASIC / SoC設計",
+      "strength": 0.74,
       "stock_ids": [
-        "2467",
-        "2493",
-        "3131",
-        "3580",
-        "3583",
-        "5443",
-        "6187",
-        "6207",
-        "6425",
-        "6640",
-        "6664",
-        "6937",
-        "7751",
-        "8027",
-        "8064"
-      ],
-      "market_count": 15
-    },
-    {
-      "slug": "container-shipping",
-      "name": "貨櫃航運",
-      "strength": -2.51,
-      "stock_ids": [
-        "2208",
-        "2603",
-        "2607",
-        "2609",
-        "2612",
-        "2613",
-        "2615",
-        "2636",
-        "2643",
-        "5609",
-        "8367"
-      ],
-      "market_count": 11
-    },
-    {
-      "slug": "機殼-機架",
-      "name": "機殼 / 機架",
-      "strength": 0.54,
-      "stock_ids": [
-        "2059",
-        "3363",
-        "8210"
+        "3443",
+        "3661",
+        "6643"
       ],
       "market_count": 3
     },
     {
-      "slug": "connector",
-      "name": "連接器（工業/消費）",
-      "strength": -2.77,
+      "slug": "epc_engineering",
+      "name": "設備與廠務工程",
+      "strength": 2.84,
       "stock_ids": [
-        "2392",
-        "2460",
-        "2462",
-        "2483",
-        "3021",
-        "3023",
-        "3501",
-        "3526",
-        "3605",
-        "3665",
-        "5460",
-        "6115",
-        "6205",
-        "6220",
-        "8103"
+        "2404",
+        "2535",
+        "2546",
+        "2597",
+        "3402",
+        "5292",
+        "5536",
+        "6122",
+        "6139",
+        "6196",
+        "6613",
+        "6667",
+        "6691",
+        "6903",
+        "7703",
+        "9933"
       ],
-      "market_count": 15
+      "market_count": 16
     },
     {
-      "slug": "silicon-wafer",
-      "name": "矽晶圓",
-      "strength": -6.48,
+      "slug": "資料中心建置-si",
+      "name": "資料中心建置 SI",
+      "strength": 2.56,
       "stock_ids": [
-        "3016",
-        "3532",
-        "5483",
-        "6182",
-        "6488",
-        "8028"
+        "2353",
+        "3231",
+        "6214"
       ],
-      "market_count": 6
-    },
-    {
-      "slug": "fpc",
-      "name": "軟板",
-      "strength": -2.12,
-      "stock_ids": [
-        "2402",
-        "3354",
-        "3390",
-        "3645",
-        "4958",
-        "6153",
-        "6269",
-        "6835",
-        "8039",
-        "8358"
-      ],
-      "market_count": 10
+      "market_count": 3
     },
     {
       "slug": "telecom-media",
       "name": "電信與數位媒體",
-      "strength": -4.3,
+      "strength": 2.57,
       "stock_ids": [
         "2412",
         "3045",
@@ -1737,164 +1642,66 @@
       "market_count": 12
     },
     {
-      "slug": "ai-server-chassis-rails",
-      "name": "機殼與滑軌",
-      "strength": -1.7,
+      "slug": "企業ssd控制器",
+      "name": "企業SSD控制器",
+      "strength": 4.89,
       "stock_ids": [
-        "2059",
-        "3013",
-        "3325",
-        "3483",
-        "3593",
-        "3693",
-        "5243",
-        "5284",
-        "5465",
-        "6117",
-        "6125",
-        "6584",
-        "8210"
+        "8299"
       ],
-      "market_count": 13
+      "market_count": 1
     },
     {
-      "slug": "microled-display",
-      "name": "MicroLED 顯示供應鏈",
-      "strength": -7.68,
+      "slug": "optical-sensors",
+      "name": "光感測與元件",
+      "strength": 3.33,
       "stock_ids": [
+        "2340",
         "2393",
-        "2409",
-        "2426",
-        "3481",
-        "3714",
-        "8064"
-      ],
-      "market_count": 6
-    },
-    {
-      "slug": "cxl-switch-hub",
-      "name": "CXL Switch / Hub",
-      "strength": -5.84,
-      "stock_ids": [
-        "2345",
-        "4906"
-      ],
-      "market_count": 2
-    },
-    {
-      "slug": "semi-process-materials",
-      "name": "前段製程材料",
-      "strength": -4.93,
-      "stock_ids": [
-        "1560",
-        "1711",
-        "1727",
-        "1773",
-        "1785",
-        "3010",
-        "3663",
-        "4749",
-        "4755",
-        "4768",
-        "4772",
-        "5234",
-        "5434"
-      ],
-      "market_count": 13
-    },
-    {
-      "slug": "400g-800g以太網路交換ic",
-      "name": "400G/800G以太網路交換IC",
-      "strength": -4.36,
-      "stock_ids": [
-        "2345",
-        "5388"
-      ],
-      "market_count": 2
-    },
-    {
-      "slug": "quartz-components",
-      "name": "石英頻率控制",
-      "strength": 1.4,
-      "stock_ids": [
-        "2484",
-        "3042",
-        "3221",
-        "6174",
-        "8182",
-        "8289"
-      ],
-      "market_count": 6
-    },
-    {
-      "slug": "steel-special",
-      "name": "鋼鐵與特鋼",
-      "strength": -2.12,
-      "stock_ids": [
-        "1605",
-        "2002",
-        "2006",
-        "2008",
-        "2010",
-        "2013",
-        "2015",
-        "2020",
-        "2023",
-        "2025",
-        "2027",
-        "2030",
-        "5009"
-      ],
-      "market_count": 13
-    },
-    {
-      "slug": "robotics_physical_ai",
-      "name": "實體 AI 機器人",
-      "strength": -6.03,
-      "stock_ids": [
-        "2049",
-        "2359",
-        "2365",
-        "2374",
-        "2489",
-        "3019",
+        "2455",
         "3059",
+        "3081",
         "3227",
-        "4571",
-        "4576",
-        "4583",
-        "4585",
-        "6166",
-        "6215",
-        "8374"
+        "3374",
+        "3714",
+        "6271",
+        "6462",
+        "6732",
+        "6742",
+        "6789",
+        "7772",
+        "8249"
       ],
       "market_count": 15
     },
     {
-      "slug": "wafer-fab-equipment",
-      "name": "晶圓廠設備",
-      "strength": -5.41,
+      "slug": "ai推論加速卡",
+      "name": "AI推論加速卡",
+      "strength": 3.48,
       "stock_ids": [
-        "2338",
-        "2467",
-        "3289",
-        "3413",
-        "3455",
-        "3551",
-        "3583",
-        "3587",
-        "3680",
-        "6532",
-        "6658",
-        "6830",
-        "6937"
+        "2357",
+        "2376",
+        "2377"
       ],
-      "market_count": 13
+      "market_count": 3
+    },
+    {
+      "slug": "silicon-wafer",
+      "name": "矽晶圓",
+      "strength": 6.89,
+      "stock_ids": [
+        "3016",
+        "3532",
+        "5483",
+        "6182",
+        "6488",
+        "8028"
+      ],
+      "market_count": 6
     },
     {
       "slug": "solar-energy",
       "name": "太陽能產業",
-      "strength": -6.49,
+      "strength": 4.73,
       "stock_ids": [
         "2406",
         "2429",
@@ -1916,9 +1723,182 @@
       "market_count": 16
     },
     {
+      "slug": "fpc",
+      "name": "軟板",
+      "strength": 2.37,
+      "stock_ids": [
+        "2402",
+        "3354",
+        "3390",
+        "3645",
+        "4958",
+        "6153",
+        "6269",
+        "6835",
+        "8039",
+        "8358"
+      ],
+      "market_count": 10
+    },
+    {
+      "slug": "container-shipping",
+      "name": "貨櫃航運",
+      "strength": 0.69,
+      "stock_ids": [
+        "2208",
+        "2603",
+        "2607",
+        "2609",
+        "2612",
+        "2613",
+        "2615",
+        "2636",
+        "2643",
+        "5609",
+        "8367"
+      ],
+      "market_count": 11
+    },
+    {
+      "slug": "offshore-wind",
+      "name": "離岸風電",
+      "strength": 0.67,
+      "stock_ids": [
+        "1503",
+        "1504",
+        "1513",
+        "1589",
+        "1605",
+        "2002",
+        "2013",
+        "2031",
+        "2072",
+        "2208",
+        "2606",
+        "3708",
+        "6753",
+        "6806",
+        "6869",
+        "6994",
+        "7786",
+        "9933",
+        "9958"
+      ],
+      "market_count": 19
+    },
+    {
+      "slug": "connector",
+      "name": "連接器（工業/消費）",
+      "strength": 0.7,
+      "stock_ids": [
+        "2392",
+        "2460",
+        "2462",
+        "2483",
+        "3021",
+        "3023",
+        "3501",
+        "3526",
+        "3605",
+        "3665",
+        "5460",
+        "6115",
+        "6205",
+        "6220",
+        "8103"
+      ],
+      "market_count": 15
+    },
+    {
+      "slug": "wafer-fab-equipment",
+      "name": "晶圓廠設備",
+      "strength": 2.76,
+      "stock_ids": [
+        "2338",
+        "2467",
+        "3289",
+        "3413",
+        "3455",
+        "3551",
+        "3583",
+        "3587",
+        "3680",
+        "6532",
+        "6658",
+        "6830",
+        "6937"
+      ],
+      "market_count": 13
+    },
+    {
+      "slug": "cxl-switch-hub",
+      "name": "CXL Switch / Hub",
+      "strength": 2.68,
+      "stock_ids": [
+        "2345",
+        "4906"
+      ],
+      "market_count": 2
+    },
+    {
+      "slug": "aiot感測-終端",
+      "name": "AIoT感測/終端",
+      "strength": 3.15,
+      "stock_ids": [
+        "2301",
+        "2436",
+        "3227"
+      ],
+      "market_count": 3
+    },
+    {
+      "slug": "機器視覺-感測器",
+      "name": "機器視覺 / 感測器",
+      "strength": 3.15,
+      "stock_ids": [
+        "2301",
+        "2436",
+        "3227"
+      ],
+      "market_count": 3
+    },
+    {
+      "slug": "robotics_physical_ai",
+      "name": "實體 AI 機器人",
+      "strength": 3.78,
+      "stock_ids": [
+        "2049",
+        "2359",
+        "2365",
+        "2374",
+        "2489",
+        "3019",
+        "3059",
+        "3227",
+        "4571",
+        "4576",
+        "4583",
+        "4585",
+        "6166",
+        "6215",
+        "8374"
+      ],
+      "market_count": 15
+    },
+    {
+      "slug": "400g-800g以太網路交換ic",
+      "name": "400G/800G以太網路交換IC",
+      "strength": 1.49,
+      "stock_ids": [
+        "2345",
+        "5388"
+      ],
+      "market_count": 2
+    },
+    {
       "slug": "ar-vr-xr-optics",
       "name": "AR/VR/XR 光學",
-      "strength": -5.83,
+      "strength": 4.99,
       "stock_ids": [
         "2498",
         "3294",
@@ -1933,42 +1913,9 @@
       "market_count": 9
     },
     {
-      "slug": "雷射元件-vcsel-dfb",
-      "name": "雷射元件 VCSEL/DFB",
-      "strength": -6.1,
-      "stock_ids": [
-        "1587",
-        "3081",
-        "6426"
-      ],
-      "market_count": 3
-    },
-    {
-      "slug": "aiot感測-終端",
-      "name": "AIoT感測/終端",
-      "strength": -6.4,
-      "stock_ids": [
-        "2301",
-        "2436",
-        "3227"
-      ],
-      "market_count": 3
-    },
-    {
-      "slug": "機器視覺-感測器",
-      "name": "機器視覺 / 感測器",
-      "strength": -6.4,
-      "stock_ids": [
-        "2301",
-        "2436",
-        "3227"
-      ],
-      "market_count": 3
-    },
-    {
       "slug": "車用pcb-連接器",
       "name": "車用PCB / 連接器",
-      "strength": -3.77,
+      "strength": 4.06,
       "stock_ids": [
         "2367",
         "3044",
@@ -1977,9 +1924,41 @@
       "market_count": 3
     },
     {
+      "slug": "semi-process-materials",
+      "name": "前段製程材料",
+      "strength": 1.02,
+      "stock_ids": [
+        "1560",
+        "1711",
+        "1727",
+        "1773",
+        "1785",
+        "3010",
+        "3663",
+        "4749",
+        "4755",
+        "4768",
+        "4772",
+        "5234",
+        "5434"
+      ],
+      "market_count": 13
+    },
+    {
+      "slug": "雷射元件-vcsel-dfb",
+      "name": "雷射元件 VCSEL/DFB",
+      "strength": 2.82,
+      "stock_ids": [
+        "1587",
+        "3081",
+        "6426"
+      ],
+      "market_count": 3
+    },
+    {
       "slug": "ai雲端服務-idc",
       "name": "AI雲端服務 / IDC",
-      "strength": -1.06,
+      "strength": 2.15,
       "stock_ids": [
         "2412",
         "3045",
@@ -1989,9 +1968,20 @@
       "market_count": 4
     },
     {
+      "slug": "ai解決方案-si",
+      "name": "AI解決方案 / SI",
+      "strength": 2.49,
+      "stock_ids": [
+        "2353",
+        "2464",
+        "6214"
+      ],
+      "market_count": 3
+    },
+    {
       "slug": "defense_industry",
       "name": "國防軍工",
-      "strength": -2.97,
+      "strength": 1.47,
       "stock_ids": [
         "1342",
         "1409",
@@ -2019,9 +2009,76 @@
       "market_count": 22
     },
     {
+      "slug": "ai資安",
+      "name": "AI資安",
+      "strength": 4.75,
+      "stock_ids": [
+        "6285"
+      ],
+      "market_count": 1
+    },
+    {
+      "slug": "浸沒式冷卻",
+      "name": "浸沒式冷卻",
+      "strength": 0.13,
+      "stock_ids": [
+        "3324",
+        "6125"
+      ],
+      "market_count": 2
+    },
+    {
+      "slug": "battery-materials",
+      "name": "電池關鍵材料",
+      "strength": 3.45,
+      "stock_ids": [
+        "1717",
+        "1723",
+        "3691",
+        "4721",
+        "4739",
+        "5227",
+        "6509",
+        "8215"
+      ],
+      "market_count": 8
+    },
+    {
+      "slug": "steel-special",
+      "name": "鋼鐵與特鋼",
+      "strength": 1.69,
+      "stock_ids": [
+        "1605",
+        "2002",
+        "2006",
+        "2008",
+        "2010",
+        "2013",
+        "2015",
+        "2020",
+        "2023",
+        "2025",
+        "2027",
+        "2030",
+        "5009"
+      ],
+      "market_count": 13
+    },
+    {
+      "slug": "aoc主動光纜",
+      "name": "AOC主動光纜",
+      "strength": 3.04,
+      "stock_ids": [
+        "3163",
+        "5301",
+        "6672"
+      ],
+      "market_count": 3
+    },
+    {
       "slug": "cybersecurity",
       "name": "資安防護",
-      "strength": -2.54,
+      "strength": 0.48,
       "stock_ids": [
         "2412",
         "2480",
@@ -2043,19 +2100,9 @@
       "market_count": 16
     },
     {
-      "slug": "浸沒式冷卻",
-      "name": "浸沒式冷卻",
-      "strength": -1.99,
-      "stock_ids": [
-        "3324",
-        "6125"
-      ],
-      "market_count": 2
-    },
-    {
       "slug": "e-commerce",
       "name": "電商零售",
-      "strength": -0.67,
+      "strength": 2.51,
       "stock_ids": [
         "2912",
         "2949",
@@ -2074,47 +2121,70 @@
       "market_count": 13
     },
     {
-      "slug": "battery-materials",
-      "name": "電池關鍵材料",
-      "strength": -1.87,
+      "slug": "光收發模組-400g-800g-1.6t",
+      "name": "光收發模組 (400G/800G/1.6T)",
+      "strength": 5.75,
       "stock_ids": [
-        "1717",
-        "1723",
-        "3691",
-        "4721",
-        "4739",
-        "5227",
-        "6509",
-        "8215"
+        "3163",
+        "3550",
+        "5301",
+        "5498"
+      ],
+      "market_count": 4
+    },
+    {
+      "slug": "工業edge-ai模組",
+      "name": "工業Edge AI模組",
+      "strength": 7.22,
+      "stock_ids": [
+        "2395",
+        "3022",
+        "3088",
+        "8050"
+      ],
+      "market_count": 4
+    },
+    {
+      "slug": "化合物半導體-gan-sic",
+      "name": "化合物半導體 GaN/SiC",
+      "strength": 6.3,
+      "stock_ids": [
+        "3016",
+        "3707",
+        "6488"
+      ],
+      "market_count": 3
+    },
+    {
+      "slug": "circular-economy-ewaste",
+      "name": "電子廢料與回收",
+      "strength": 3.78,
+      "stock_ids": [
+        "1785",
+        "6803",
+        "6894",
+        "8341",
+        "8390",
+        "8422",
+        "8438",
+        "8440"
       ],
       "market_count": 8
     },
     {
-      "slug": "ai解決方案-si",
-      "name": "AI解決方案 / SI",
-      "strength": -6.95,
+      "slug": "光纖連接器-被動元件",
+      "name": "光纖連接器 / 被動元件",
+      "strength": 1.33,
       "stock_ids": [
-        "2353",
-        "2464",
-        "6214"
+        "3533",
+        "3605"
       ],
-      "market_count": 3
-    },
-    {
-      "slug": "aoc主動光纜",
-      "name": "AOC主動光纜",
-      "strength": -2.43,
-      "stock_ids": [
-        "3163",
-        "5301",
-        "6672"
-      ],
-      "market_count": 3
+      "market_count": 2
     },
     {
       "slug": "water-environment",
       "name": "水資源環保工程",
-      "strength": -2.61,
+      "strength": 0.96,
       "stock_ids": [
         "1535",
         "2515",
@@ -2135,79 +2205,9 @@
       "market_count": 15
     },
     {
-      "slug": "光收發模組-400g-800g-1.6t",
-      "name": "光收發模組 (400G/800G/1.6T)",
-      "strength": -3.81,
-      "stock_ids": [
-        "3163",
-        "3550",
-        "5301",
-        "5498"
-      ],
-      "market_count": 4
-    },
-    {
-      "slug": "化合物半導體-gan-sic",
-      "name": "化合物半導體 GaN/SiC",
-      "strength": -5.57,
-      "stock_ids": [
-        "3016",
-        "3707",
-        "6488"
-      ],
-      "market_count": 3
-    },
-    {
-      "slug": "ai資安",
-      "name": "AI資安",
-      "strength": -6.34,
-      "stock_ids": [
-        "6285"
-      ],
-      "market_count": 1
-    },
-    {
-      "slug": "工業edge-ai模組",
-      "name": "工業Edge AI模組",
-      "strength": -4.07,
-      "stock_ids": [
-        "2395",
-        "3022",
-        "3088",
-        "8050"
-      ],
-      "market_count": 4
-    },
-    {
-      "slug": "光纖連接器-被動元件",
-      "name": "光纖連接器 / 被動元件",
-      "strength": -3.45,
-      "stock_ids": [
-        "3533",
-        "3605"
-      ],
-      "market_count": 2
-    },
-    {
-      "slug": "circular-economy-ewaste",
-      "name": "電子廢料與回收",
-      "strength": -3.46,
-      "stock_ids": [
-        "1785",
-        "6803",
-        "6894",
-        "8341",
-        "8390",
-        "8422",
-        "8438",
-        "8440"
-      ],
-      "market_count": 8
-    },
-    {
       "slug": "auto-precision-parts",
       "name": "汽車精密零組件",
-      "strength": -4.19,
+      "strength": 2.79,
       "stock_ids": [
         "1319",
         "1522",
@@ -2225,7 +2225,7 @@
     {
       "slug": "dry-bulk-shipping",
       "name": "散裝航運",
-      "strength": -3.22,
+      "strength": 1.38,
       "stock_ids": [
         "2601",
         "2605",
@@ -2239,50 +2239,9 @@
       "market_count": 8
     },
     {
-      "slug": "類比ic-pmic",
-      "name": "類比IC / PMIC",
-      "strength": -7.19,
-      "stock_ids": [
-        "2363",
-        "2436",
-        "4968",
-        "6243",
-        "8081"
-      ],
-      "market_count": 5
-    },
-    {
-      "slug": "軟板-fpc",
-      "name": "軟板 FPC",
-      "strength": 2.36,
-      "stock_ids": [
-        "6153",
-        "6269"
-      ],
-      "market_count": 2
-    },
-    {
-      "slug": "it-si",
-      "name": "整合與委外",
-      "strength": -2.25,
-      "stock_ids": [
-        "2453",
-        "2471",
-        "2480",
-        "3570",
-        "4953",
-        "5212",
-        "5403",
-        "6183",
-        "6214",
-        "8099"
-      ],
-      "market_count": 10
-    },
-    {
       "slug": "connector-automotive",
       "name": "車用連接器",
-      "strength": -3.55,
+      "strength": 3.08,
       "stock_ids": [
         "2476",
         "3003",
@@ -2298,9 +2257,32 @@
       "market_count": 10
     },
     {
+      "slug": "軟板-fpc",
+      "name": "軟板 FPC",
+      "strength": 4.17,
+      "stock_ids": [
+        "6153",
+        "6269"
+      ],
+      "market_count": 2
+    },
+    {
+      "slug": "類比ic-pmic",
+      "name": "類比IC / PMIC",
+      "strength": 2.2,
+      "stock_ids": [
+        "2363",
+        "2436",
+        "4968",
+        "6243",
+        "8081"
+      ],
+      "market_count": 5
+    },
+    {
       "slug": "電源管理ic-pmic",
       "name": "電源管理IC PMIC",
-      "strength": -7.58,
+      "strength": 2.7,
       "stock_ids": [
         "2363",
         "6138",
@@ -2309,9 +2291,27 @@
       "market_count": 3
     },
     {
+      "slug": "it-si",
+      "name": "整合與委外",
+      "strength": 0.47,
+      "stock_ids": [
+        "2453",
+        "2471",
+        "2480",
+        "3570",
+        "4953",
+        "5212",
+        "5403",
+        "6183",
+        "6214",
+        "8099"
+      ],
+      "market_count": 10
+    },
+    {
       "slug": "cloud-msp",
       "name": "雲端與 MSP",
-      "strength": -1.72,
+      "strength": -0.64,
       "stock_ids": [
         "3029",
         "6112",
@@ -2322,28 +2322,9 @@
       "market_count": 5
     },
     {
-      "slug": "enterprise-saas",
-      "name": "企業 SaaS",
-      "strength": -2.4,
-      "stock_ids": [
-        "3130",
-        "5203",
-        "6231",
-        "6516",
-        "6741",
-        "6752",
-        "6791",
-        "6870",
-        "6874",
-        "6925",
-        "8284"
-      ],
-      "market_count": 11
-    },
-    {
       "slug": "cnc-machine-tool",
       "name": "CNC工具機",
-      "strength": -4.2,
+      "strength": -0.21,
       "stock_ids": [
         "1530",
         "1540",
@@ -2356,9 +2337,25 @@
       "market_count": 7
     },
     {
+      "slug": "enterprise-saas",
+      "name": "企業 SaaS",
+      "strength": 1.35,
+      "stock_ids": [
+        "3130",
+        "5203",
+        "6741",
+        "6752",
+        "6870",
+        "6874",
+        "6925",
+        "8284"
+      ],
+      "market_count": 8
+    },
+    {
       "slug": "thermal-interface-material",
       "name": "Thermal Interface Material",
-      "strength": -1.8,
+      "strength": 0.82,
       "stock_ids": [
         "4306",
         "5234"
@@ -2368,7 +2365,7 @@
     {
       "slug": "medical-consumables",
       "name": "醫療耗材與植入物",
-      "strength": -1.87,
+      "strength": 1.15,
       "stock_ids": [
         "1781",
         "4104",
@@ -2381,21 +2378,9 @@
       "market_count": 7
     },
     {
-      "slug": "ivd-diagnostics",
-      "name": "體外診斷 IVD",
-      "strength": -2.35,
-      "stock_ids": [
-        "1733",
-        "4155",
-        "4736",
-        "4737"
-      ],
-      "market_count": 4
-    },
-    {
       "slug": "medical-electronics",
       "name": "醫療電子與數位健康",
-      "strength": -0.8,
+      "strength": 2.33,
       "stock_ids": [
         "4116",
         "4164",
@@ -2404,6 +2389,18 @@
         "6796"
       ],
       "market_count": 5
+    },
+    {
+      "slug": "ivd-diagnostics",
+      "name": "體外診斷 IVD",
+      "strength": 0.35,
+      "stock_ids": [
+        "1733",
+        "4155",
+        "4736",
+        "4737"
+      ],
+      "market_count": 4
     }
   ],
   "stock_concepts": {
@@ -6941,7 +6938,6 @@
       "液冷散熱系統"
     ],
     "6231": [
-      "企業 SaaS",
       "軟體與資服"
     ],
     "6233": [
@@ -7255,7 +7251,6 @@
       "矽光子與 CPO"
     ],
     "6516": [
-      "企業 SaaS",
       "軟體與資服"
     ],
     "6517": [
@@ -7682,7 +7677,6 @@
       "其他"
     ],
     "6791": [
-      "企業 SaaS",
       "軟體與資服"
     ],
     "6792": [
