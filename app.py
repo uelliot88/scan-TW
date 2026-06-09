@@ -272,6 +272,15 @@ def get_stock_concepts(symbol, code):
 def normalize_code(symbol):
     return str(symbol).upper().replace('.TWO', '').replace('.TW', '')
 
+def symbol_matches_search(symbol, query):
+    query = str(query or '').strip().lower()
+    if not query:
+        return True
+    query_code = query.upper().replace('.TWO', '').replace('.TW', '').lower()
+    code = normalize_code(symbol).lower()
+    name = str(name_map.get(symbol, '')).lower()
+    return query_code in code or query in name
+
 def get_selected_theme_slug():
     try:
         raw_theme = st.query_params.get('theme')
@@ -492,7 +501,37 @@ def toggle_selected(sym):
 # 5. 分頁設定
 # ==========================================
 PAGE_SIZE = 40
+
+search_col, col_info, col_page = st.columns([2.1, 2.1, 1])
+with search_col:
+    target_search = st.text_input(
+        '搜尋標的',
+        value='',
+        placeholder='輸入代號或股票名稱',
+        label_visibility='collapsed',
+        key='target_search',
+    ).strip()
+
+if 'last_target_search' not in st.session_state:
+    st.session_state.last_target_search = target_search
+search_changed = target_search != st.session_state.last_target_search
+if search_changed:
+    st.session_state.last_target_search = target_search
+
+if target_search:
+    symbol_list = [sym for sym in symbol_list if symbol_matches_search(sym, target_search)]
+
 total = len(symbol_list)
+if total == 0:
+    with col_info:
+        st.markdown(
+            f"<div style='font-size:0.9rem; color:#b00020; padding-top:6px;'>"
+            f"「{html.escape(target_search)}」不在目前篩選名單內"
+            "</div>",
+            unsafe_allow_html=True,
+        )
+    st.stop()
+
 total_pages = (total + PAGE_SIZE - 1) // PAGE_SIZE
 
 def get_query_page():
@@ -548,10 +587,11 @@ if 'current_page' not in st.session_state:
 query_page = get_query_page()
 if query_page is not None:
     st.session_state.current_page = query_page
+if search_changed:
+    st.session_state.current_page = 1
 
 st.session_state.current_page = max(1, min(st.session_state.current_page, total_pages))
 
-col_info, col_page = st.columns([3, 1])
 with col_page:
     page = st.selectbox('頁碼', list(range(1, total_pages + 1)),
                         index=st.session_state.current_page - 1,
@@ -560,7 +600,15 @@ with col_page:
     if page != query_page:
         set_query_page(page)
 with col_info:
-    st.markdown(f"<div style='font-size:0.9rem; color:#000; padding-top:6px;'>共 {total} 檔，第 {page}/{total_pages} 頁</div>", unsafe_allow_html=True)
+    if target_search:
+        st.markdown(
+            f"<div style='font-size:0.9rem; color:#000; padding-top:6px;'>"
+            f"搜尋「{html.escape(target_search)}」：{total} 檔，第 {page}/{total_pages} 頁"
+            "</div>",
+            unsafe_allow_html=True,
+        )
+    else:
+        st.markdown(f"<div style='font-size:0.9rem; color:#000; padding-top:6px;'>共 {total} 檔，第 {page}/{total_pages} 頁</div>", unsafe_allow_html=True)
 
 start = (page - 1) * PAGE_SIZE
 page_symbols = symbol_list[start:start + PAGE_SIZE]
